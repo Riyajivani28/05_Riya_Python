@@ -1,0 +1,10 @@
+text = "Python Programming"
+print("Original String :", text)
+print("First Word :", text[0:6])
+print("Second Word :", text[7:18])
+print("First 6 Characters :", text[:6])
+print("Characters From Index 7 :", text[7:])
+print("Alternate Characters :", text[::2])
+print("Reversed String :", text[::-1])
+print("Last 5 Characters :", text[-5:])
+print("String Without Last 3 Characters :", text[:-3])

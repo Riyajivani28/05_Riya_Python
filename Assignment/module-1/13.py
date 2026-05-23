@@ -1,0 +1,7 @@
+str="Hello"
+print(str)
+
+
+
+
+
