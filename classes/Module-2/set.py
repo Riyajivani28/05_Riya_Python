@@ -17,7 +17,7 @@ print(set)
 set.remove('datii')
 print(set)
 
-set.update("bhavu","datii")
+set.update(["bhavu","datii"])
 print(set)
 
 set.add("bhavu")
