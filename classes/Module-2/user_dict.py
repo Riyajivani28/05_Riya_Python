@@ -5,3 +5,6 @@ for i in range(n):
     value=input("enter the value name :")
     dict[key]=value
 print(dict)
+
+
+n=input()
