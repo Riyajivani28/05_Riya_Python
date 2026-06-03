@@ -1,4 +1,4 @@
-								◆ Introduction to Python Theory ◆ 
+																◆ Introduction to Python Theory ◆ 
 								
 1. Introduction to Python and its Features (simple, high-level, interpreted language).
 -->Introduction:Python is a powerful, easy-to-learn, and widely used programming language. It was developed by Guido van Rossum and released in 1991. Python was designed with the main goal of making programming simple, readable, and efficient.
