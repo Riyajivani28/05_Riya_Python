@@ -1,0 +1,25 @@
+1)class:
+collection of member function and member name 
+blueprint of object
+
+2)object:
+instance of class
+
+3)inheritance:
+one class inherits to another class
+
+4)databinding
+-data and method connected hoi 
+
+5)polymorphism:
+method overloading:
+same method name ,same argument and python does not support method overloading
+
+method overiding:
+same method name ,same argument but diffrent class
+
+6)data hiding
+public:
+
+private:
+inside the using function
