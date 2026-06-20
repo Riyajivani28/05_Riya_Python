@@ -1,0 +1,6 @@
+f = open("playlist.txt", "r")
+f.readline()      
+f.readline()      
+pos = f.tell()   
+f.seek(pos)
+print(f.readline().strip())   
