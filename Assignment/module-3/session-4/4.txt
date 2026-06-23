@@ -1,0 +1,8 @@
+--> NameError: name 'InvalidSeatNumberError' is not defined
+means that Python is trying to raise the exception InvalidSeatNumberError, 
+but this exception class has not been created or defined anywhere in the 
+program.
+
+-->raise InvalidSeatNumberError('Seat number must be positive')
+Python looks for InvalidSeatNumberError, but cannot find it, 
+so it gives a NameError.
