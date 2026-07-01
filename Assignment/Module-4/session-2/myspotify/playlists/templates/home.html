@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Spotify</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#121212,#1e1e1e);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            color:white;
+        }
+
+        .container{
+            width:500px;
+            text-align:center;
+            background:#222;
+            padding:40px;
+            border-radius:20px;
+            box-shadow:0 0 20px rgba(0,0,0,0.5);
+        }
+
+        h1{
+            color:#1DB954;
+            font-size:40px;
+            margin-bottom:20px;
+        }
+
+        p{
+            color:#d3d3d3;
+            font-size:18px;
+            margin-bottom:30px;
+            line-height:1.6;
+        }
+
+        a{
+            display:inline-block;
+            background:#1DB954;
+            color:white;
+            text-decoration:none;
+            padding:14px 35px;
+            border-radius:30px;
+            font-size:20px;
+            transition:0.3s;
+        }
+
+        a:hover{
+            background:#18a64c;
+            transform:scale(1.08);
+        }
+
+        .icon{
+            font-size:70px;
+            margin-bottom:20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="icon">🎵</div>
+
+    <h1>Welcome to My Spotify - {{name}}</h1>
+
+    <p>
+        Discover your favorite songs, enjoy trending playlists,
+        and listen to music anytime. Click below to explore
+        your music collection.
+    </p>
+
+    <a href="/music/">🎧 Explore Playlist</a>
+
+</div>
+
+</body>
+</html>
