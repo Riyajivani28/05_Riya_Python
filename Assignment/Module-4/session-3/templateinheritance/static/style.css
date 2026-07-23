@@ -1,0 +1,31 @@
+body {
+    background-color: #647f97;
+}
+
+main {
+    min-height: 500px;
+}
+
+h1 {
+    color: #111111;
+}
+.card {
+    background-color: #000000;
+    color: white;
+    border: 1px solid #333;
+}
+
+.card .card-title {
+    color: #f5c542;
+}
+
+.card .btn {
+    background-color: #f5c542;
+    color: #000;
+    border: none;
+}
+
+.card .btn:hover {
+    background-color: #ffffff;
+    color: #000;
+}
