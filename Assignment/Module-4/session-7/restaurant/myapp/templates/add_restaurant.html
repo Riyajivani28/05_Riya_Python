@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Registration</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-8">
+
+<div class="max-w-7xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden grid lg:grid-cols-2">
+
+    <!-- Left Section -->
+    <div class="relative">
+
+        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1000&q=80"
+             class="h-full w-full object-cover">
+
+        <div class="absolute inset-0 bg-black/60"></div>
+
+        <div class="absolute inset-0 flex flex-col justify-center px-12 text-white">
+
+            <h1 class="text-5xl font-bold">
+                Taste Begins Here
+            </h1>
+
+            <p class="mt-6 text-lg leading-8 text-gray-200">
+                Join our restaurant community and showcase your delicious food
+                to thousands of customers searching for their next favorite meal.
+            </p>
+
+            <div class="mt-10 space-y-4">
+
+                <div class="bg-white/20 backdrop-blur-md rounded-xl p-4">
+                    🍽️ Premium Restaurant Listing
+                </div>
+
+                <div class="bg-white/20 backdrop-blur-md rounded-xl p-4">
+                    📍 Reach More Customers
+                </div>
+
+                <div class="bg-white/20 backdrop-blur-md rounded-xl p-4">
+                    ⭐ Build Your Reputation
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Right Section -->
+    <div class="bg-white p-12 flex items-center">
+
+        <div class="w-full">
+
+            <h2 class="text-4xl font-bold text-gray-800">
+                Register Restaurant
+            </h2>
+
+            <p class="text-gray-500 mt-2 mb-8">
+                Fill in the restaurant information.
+            </p>
+
+            <form method="POST" class="space-y-6">
+
+                {% csrf_token %}
+
+                <div>
+                    <label class="font-semibold text-gray-700">
+                        Restaurant Name
+                    </label>
+                    
+
+                    <div class="mt-2 border-2 border-indigo-200 rounded-xl px-4 py-3 focus-within:border-indigo-600">
+                        {{ form.name }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="font-semibold text-gray-700">
+                        Cuisine
+                    </label>
+                    
+
+                    <div class="mt-2 border-2 border-indigo-200 rounded-xl px-4 py-3 focus-within:border-indigo-600">
+                        {{ form.cuisine }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="font-semibold text-gray-700">
+                        Rating
+                    </label>
+                  
+
+                    <div class="mt-2 border-2 border-indigo-200 rounded-xl px-4 py-3 focus-within:border-indigo-600">
+                        {{ form.rating }}
+                    </div>
+                </div>
+
+                <button
+                    class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold text-lg hover:scale-105 duration-300">
+
+                    Save Restaurant
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
