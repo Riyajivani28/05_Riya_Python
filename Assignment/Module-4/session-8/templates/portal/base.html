@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MusicZone & Portal App{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fk-navbar {
+            background-color: #2874f0;
+            color: white;
+        }
+        .fk-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #ffe500 !important;
+            text-decoration: none;
+            font-style: italic;
+        }
+        .fk-subbrand {
+            font-size: 0.75rem;
+            color: #fff;
+        }
+        .nav-link-custom {
+            color: white !important;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+        .nav-link-custom:hover {
+            color: #ffe500 !important;
+        }
+        .btn-fk-login {
+            background-color: white;
+            color: #2874f0;
+            font-weight: 600;
+            padding: 6px 24px;
+            border-radius: 2px;
+            text-decoration: none;
+        }
+        .btn-fk-login:hover {
+            background-color: #f0f0f0;
+            color: #2874f0;
+        }
+        .user-badge {
+            color: #fff;
+            font-weight: 600;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Flipkart-style E-Commerce Navbar -->
+    <nav class="navbar navbar-expand-lg fk-navbar shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fk-brand" href="{% url 'home' %}">
+                <i class="fa-solid fa-cart-shopping me-1"></i> Flipkart / MusicZone
+            </a>
+            
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="{% url 'home' %}">Home</a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item me-2">
+                            <span class="user-badge">
+                                <i class="fa-solid fa-user me-1"></i> {{ user.username }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light btn-sm font-weight-bold" href="{% url 'logout' %}">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item me-2">
+                            <a class="btn-fk-login" href="{% url 'login' %}">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="{% url 'signup' %}">
+                                <i class="fa-solid fa-user-plus me-1"></i> Signup
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container for Flash Messages -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="container my-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

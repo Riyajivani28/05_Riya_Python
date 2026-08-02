@@ -1,0 +1,43 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Zomato Food Delivery - Sign Up{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow border-0 rounded-3">
+            <div class="card-header text-white text-center py-3" style="background-color: #cb202d;">
+                <h3 class="mb-0 fw-bold"><i class="fa-solid fa-utensils me-2"></i>zomato</h3>
+                <small>Food Delivery App - Create Account</small>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{% url 'signup' %}">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label font-weight-bold">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn text-white w-100 py-2 fw-bold mt-2" style="background-color: #cb202d;">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-white py-3">
+                <span class="text-muted">Already have an account?</span> 
+                <a href="{% url 'login' %}" class="fw-bold" style="color: #cb202d; text-decoration: none;">Log in</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
