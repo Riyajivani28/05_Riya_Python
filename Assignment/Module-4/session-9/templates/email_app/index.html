@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Email Studio Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="text-center bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Django Email Notification System</h1>
+        <p class="text-gray-600 max-w-xl mx-auto">Select a tool below to configure and test email notifications. Emails are only sent when you submit a form.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition">
+            <div>
+                <div class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 font-bold">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">Simple Test Email</h2>
+                <p class="text-gray-600 text-sm mb-4">Send a basic plain text test email using Django's standard <code class="bg-gray-100 text-indigo-600 px-1 py-0.5 rounded">send_mail</code> function.</p>
+            </div>
+            <a href="{% url 'send_simple_test_email' %}" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm">
+                Open Test Email Form <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition">
+            <div>
+                <div class="w-12 h-12 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4 font-bold">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">Password Reset Email</h2>
+                <p class="text-gray-600 text-sm mb-4">Simulate a security password reset email matching Paytm/Flipkart app style using <code class="bg-gray-100 text-amber-600 px-1 py-0.5 rounded">send_mail</code>.</p>
+            </div>
+            <a href="{% url 'send_password_reset_email_default' %}" class="inline-flex items-center justify-center bg-amber-600 hover:bg-amber-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm">
+                Open Password Reset Form <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition">
+            <div>
+                <div class="w-12 h-12 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center text-xl mb-4 font-bold">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">Swiggy Order Confirmation</h2>
+                <p class="text-gray-600 text-sm mb-4">Send a dynamic HTML food order confirmation email with <code class="bg-gray-100 text-orange-600 px-1 py-0.5 rounded">EmailMultiAlternatives</code> & <code class="bg-gray-100 text-orange-600 px-1 py-0.5 rounded">render_to_string</code>.</p>
+            </div>
+            <a href="{% url 'send_order_confirmation_email_default' %}" class="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm">
+                Open Swiggy Order Form <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition">
+            <div>
+                <div class="w-12 h-12 rounded-lg bg-red-50 text-red-600 flex items-center justify-center text-xl mb-4 font-bold">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">IPL Fantasy Welcome Email</h2>
+                <p class="text-gray-600 text-sm mb-4">Send a promotional HTML email for IPL Fantasy League using AI-generated catchy copy & dynamic tags.</p>
+            </div>
+            <a href="{% url 'send_ipl_welcome_email_default' %}" class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm">
+                Open IPL Welcome Form <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

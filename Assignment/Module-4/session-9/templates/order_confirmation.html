@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Order Confirmation - Swiggy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f5;
+            margin: 0;
+            padding: 20px;
+            color: #282c3f;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #fc8019;
+            color: #ffffff;
+            padding: 24px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 24px;
+        }
+        .order-info {
+            background-color: #fff9f2;
+            border-left: 4px solid #fc8019;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+        .order-info p {
+            margin: 4px 0;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .items-table th {
+            text-align: left;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .items-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .total-row td {
+            font-weight: bold;
+            font-size: 16px;
+            border-top: 2px solid #282c3f;
+            border-bottom: none;
+        }
+        .footer {
+            background-color: #282c3f;
+            color: #a9abb2;
+            text-align: center;
+            padding: 16px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Swiggy Order Confirmation</h1>
+        </div>
+        <div class="content">
+            <h2>Hi {{ user_name }},</h2>
+            <p>Thank you for your order! Your delicious food is being prepared by <strong>{{ restaurant_name }}</strong>.</p>
+            
+            <div class="order-info">
+                <p><strong>Order ID:</strong> #{{ order_id }}</p>
+                <p><strong>Delivery Address:</strong> {{ delivery_address }}</p>
+            </div>
+
+            <h3>Order Summary</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>₹{{ item.price }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="total-row">
+                        <td colspan="2">Total Paid</td>
+                        <td>₹{{ total_amount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Track your delivery status live on the Swiggy app.</p>
+            <p>Enjoy your meal! 🍔🍕</p>
+        </div>
+        <div class="footer">
+            <p>© 2026 Swiggy Clone. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
