@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flipkart Product Management{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Flipkart Theme Styling -->
+    <style>
+        :root {
+            --fk-blue: #2874f0;
+            --fk-yellow: #ffe500;
+            --fk-dark: #172337;
+            --fk-bg: #f1f3f6;
+        }
+
+        body {
+            background-color: var(--fk-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #212121;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-flipkart {
+            background-color: var(--fk-blue);
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+            padding: 12px 0;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 700;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .navbar-brand-custom .plus-text {
+            color: var(--fk-yellow);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .main-container {
+            flex: 1;
+            padding-top: 30px;
+            padding-bottom: 40px;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 20px 24px;
+        }
+
+        .btn-fk-primary {
+            background-color: var(--fk-blue);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-fk-primary:hover {
+            background-color: #1259c7;
+            color: #fff;
+        }
+
+        .btn-fk-yellow {
+            background-color: var(--fk-yellow);
+            color: var(--fk-dark);
+            font-weight: 700;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-fk-yellow:hover {
+            background-color: #ebd300;
+            color: var(--fk-dark);
+        }
+
+        .table-custom {
+            margin-bottom: 0;
+        }
+
+        .table-custom th {
+            background-color: #f8f9fa;
+            color: #878787;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            padding: 14px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table-custom td {
+            padding: 16px 20px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+
+        .price-tag {
+            font-weight: 700;
+            color: #212121;
+        }
+
+        .category-badge {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .footer {
+            background-color: var(--fk-dark);
+            color: #878787;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .alert-custom {
+            border-radius: 6px;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <!-- Flipkart Top Header -->
+    <header class="navbar-flipkart">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'product_list' %}" class="navbar-brand-custom">
+                    Flipkart <span class="plus-text">Plus <i class="fa-solid fa-plus text-warning"></i></span>
+                </a>
+                <div>
+                    <a href="{% url 'product_add' %}" class="btn btn-fk-yellow shadow-sm">
+                        <i class="fa-solid fa-plus me-1"></i> Add Product
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+        <div class="container">
+            <!-- Messages -->
+            {% if messages %}
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show alert-custom mb-4" role="alert">
+                                <i class="fa-solid fa-circle-check me-2"></i> {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="mb-0">© {% now "Y" %} Flipkart Admin Panel — Product Management</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

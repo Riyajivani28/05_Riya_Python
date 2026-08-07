@@ -1,0 +1,68 @@
+{% extends 'products/base.html' %}
+
+{% block title %}All Products | Flipkart Dashboard{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card card-custom">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold text-dark">
+                    <i class="fa-solid fa-boxes-stacked me-2 text-primary"></i>Product Inventory
+                </h4>
+                <a href="{% url 'product_add' %}" class="btn btn-fk-primary">
+                    <i class="fa-solid fa-plus me-1"></i> Add New Product
+                </a>
+            </div>
+            <div class="card-body p-0">
+                {% if products %}
+                    <div class="table-responsive">
+                        <table class="table table-custom align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th style="width: 180px;" class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                    <tr>
+                                        <td class="text-muted">{{ forloop.counter }}</td>
+                                        <td class="fw-semibold">{{ product.name }}</td>
+                                        <td>
+                                            <span class="category-badge">{{ product.category }}</span>
+                                        </td>
+                                        <td class="price-tag">₹{{ product.price }}</td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group" aria-label="Product Actions">
+                                                <a href="{% url 'product_edit' product.pk %}" class="btn btn-sm btn-outline-primary" title="Edit Product">
+                                                    <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                                                </a>
+                                                <a href="{% url 'product_delete' product.pk %}" class="btn btn-sm btn-outline-danger ms-1" title="Delete Product">
+                                                    <i class="fa-solid fa-trash-can me-1"></i> Delete
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa-solid fa-box-open text-muted fa-3x mb-3"></i>
+                        <h5 class="text-muted">No products available in the inventory.</h5>
+                        <p class="text-secondary mb-3">Get started by adding your first Flipkart product.</p>
+                        <a href="{% url 'product_add' %}" class="btn btn-fk-primary">
+                            <i class="fa-solid fa-plus me-1"></i> Add Product Now
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
