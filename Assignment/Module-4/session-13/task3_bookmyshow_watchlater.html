@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookMyShow - Watch Later List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333545;
+            color: #ffffff;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f12545;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        /* Dynamic Success Banner */
+        .alert-success {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .movie-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+
+        .movie-info {
+            padding: 16px;
+        }
+
+        .movie-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        .movie-genre {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .movie-actions {
+            padding: 0 16px 16px 16px;
+        }
+
+        .btn-delete-watchlater {
+            width: 100%;
+            background-color: #f12545;
+            color: white;
+            border: none;
+            padding: 10px 0;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-delete-watchlater:hover {
+            background-color: #d01d39;
+        }
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">book<span style="color:white">my</span>show</div>
+    </div>
+
+    <div class="main-container">
+        <h2 class="page-title">My Watch Later Movies</h2>
+
+        <!-- Dynamic Success Message Alert -->
+        <div id="successAlert" class="alert-success"></div>
+
+        <div class="movie-grid" id="movieGrid">
+            <div class="movie-card" id="movie-101">
+                <div class="movie-info">
+                    <div class="movie-title">Kalki 2898 AD</div>
+                    <div class="movie-genre">Action / Sci-Fi / Drama</div>
+                </div>
+                <div class="movie-actions">
+                    <button class="btn-delete-watchlater" onclick="removeMovie(101, 'Kalki 2898 AD')">Remove from Watch Later</button>
+                </div>
+            </div>
+
+            <div class="movie-card" id="movie-102">
+                <div class="movie-info">
+                    <div class="movie-title">Stree 2</div>
+                    <div class="movie-genre">Comedy / Horror</div>
+                </div>
+                <div class="movie-actions">
+                    <button class="btn-delete-watchlater" onclick="removeMovie(102, 'Stree 2')">Remove from Watch Later</button>
+                </div>
+            </div>
+
+            <div class="movie-card" id="movie-103">
+                <div class="movie-info">
+                    <div class="movie-title">Pushpa 2: The Rule</div>
+                    <div class="movie-genre">Action / Thriller</div>
+                </div>
+                <div class="movie-actions">
+                    <button class="btn-delete-watchlater" onclick="removeMovie(103, 'Pushpa 2: The Rule')">Remove from Watch Later</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+            No movies in your Watch Later list.
+        </div>
+    </div>
+
+    <script>
+        function removeMovie(movieId, movieTitle) {
+            // Dummy endpoint for DELETE AJAX JSON request
+            const endpoint = 'https://jsonplaceholder.typicode.com/posts/' + movieId;
+
+            // Fetch API sending JSON request
+            fetch(endpoint, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: movieId,
+                    title: movieTitle
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 1. Remove movie DOM element
+                    const movieCard = document.getElementById(`movie-${movieId}`);
+                    if (movieCard) {
+                        movieCard.remove();
+                    }
+
+                    // 2. Display dynamic success message
+                    const alertBox = document.getElementById('successAlert');
+                    alertBox.innerText = `"${movieTitle}" successfully removed from Watch Later!`;
+                    alertBox.style.display = 'block';
+
+                    // Auto hide alert after 4 seconds
+                    setTimeout(() => {
+                        alertBox.style.display = 'none';
+                    }, 4000);
+
+                    // Check if movie grid is empty
+                    const grid = document.getElementById('movieGrid');
+                    if (grid.children.length === 0) {
+                        document.getElementById('emptyState').style.display = 'block';
+                    }
+                } else {
+                    alert('Failed to remove movie from Watch Later.');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing movie:', error);
+                alert('An error occurred while deleting the movie.');
+            });
+        }
+    </script>
+
+</body>
+</html>

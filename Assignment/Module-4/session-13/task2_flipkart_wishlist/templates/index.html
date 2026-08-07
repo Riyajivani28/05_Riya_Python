@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart Wishlist - AJAX Remove</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f1f3f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #2874f0;
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar h1 {
+            font-size: 20px;
+            margin: 0;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #212121;
+        }
+
+        .product-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-card {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-right: 20px;
+            border-radius: 4px;
+        }
+
+        .product-details {
+            flex-grow: 1;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #212121;
+        }
+
+        .btn-remove {
+            background-color: transparent;
+            color: #878787;
+            border: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-remove:hover {
+            color: #fb641b;
+            border-color: #fb641b;
+        }
+
+        .empty-wishlist {
+            padding: 40px;
+            text-align: center;
+            color: #878787;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h1>Flipkart Wishlist</h1>
+    </div>
+
+    <div class="container">
+        <div class="header">My Wishlist (<span id="itemCount">{{ products|length }}</span>)</div>
+
+        <ul class="product-list" id="wishlistContainer">
+            {% for product in products %}
+            <li class="product-card" id="product-{{ product.id }}">
+                <div class="product-details">
+                    <div class="product-name">{{ product.name }}</div>
+                    <div class="product-price">{{ product.price }}</div>
+                </div>
+                <button class="btn-remove" onclick="removeFromWishlist({{ product.id }})">Remove from Wishlist</button>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div id="emptyWishlistMsg" class="empty-wishlist" style="display: {% if products %}none{% else %}block{% endif %};">
+            Your Wishlist is currently empty.
+        </div>
+    </div>
+
+    <script>
+        function removeFromWishlist(productId) {
+            // AJAX fetch request with method 'DELETE'
+            fetch(`/api/wishlist/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to remove item');
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update DOM: Remove product element from UI without page reload
+                    const productCard = document.getElementById(`product-${productId}`);
+                    if (productCard) {
+                        productCard.remove();
+                    }
+
+                    // Update item count dynamically
+                    const currentCountElem = document.getElementById('itemCount');
+                    let currentCount = parseInt(currentCountElem.innerText) - 1;
+                    currentCountElem.innerText = currentCount;
+
+                    if (currentCount === 0) {
+                        document.getElementById('emptyWishlistMsg').style.display = 'block';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error removing item from wishlist:', error);
+                alert('Could not remove item from wishlist.');
+            });
+        }
+    </script>
+
+</body>
+</html>

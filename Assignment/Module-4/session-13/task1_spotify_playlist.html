@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlist - AJAX Delete</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .playlist-container {
+            width: 450px;
+            background-color: #181818;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            color: #1db954;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: #282828;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .song-item:hover {
+            background-color: #333333;
+        }
+
+        .song-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .song-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .song-artist {
+            font-size: 13px;
+            color: #b3b3b3;
+            margin-top: 4px;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .empty-msg {
+            color: #b3b3b3;
+            text-align: center;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="playlist-container">
+        <h2>My Spotify Playlist</h2>
+        <ul class="song-list" id="playlist">
+            <li class="song-item" id="song-1">
+                <div class="song-info">
+                    <span class="song-title">Blinding Lights</span>
+                    <span class="song-artist">The Weeknd</span>
+                </div>
+                <button class="btn-delete" onclick="deleteSong(1)">Delete</button>
+            </li>
+            <li class="song-item" id="song-2">
+                <div class="song-info">
+                    <span class="song-title">Shape of You</span>
+                    <span class="song-artist">Ed Sheeran</span>
+                </div>
+                <button class="btn-delete" onclick="deleteSong(2)">Delete</button>
+            </li>
+            <li class="song-item" id="song-3">
+                <div class="song-info">
+                    <span class="song-title">Starboy</span>
+                    <span class="song-artist">The Weeknd ft. Daft Punk</span>
+                </div>
+                <button class="btn-delete" onclick="deleteSong(3)">Delete</button>
+            </li>
+        </ul>
+        <div id="emptyMessage" class="empty-msg" style="display: none;">Your playlist is empty.</div>
+    </div>
+
+    <script>
+        function deleteSong(songId) {
+            // Using JSONPlaceholder as dummy endpoint for AJAX DELETE request
+            const dummyEndpoint = `https://jsonplaceholder.typicode.com/posts/${songId}`;
+
+            fetch(dummyEndpoint, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Remove song element from DOM on success
+                    const songElement = document.getElementById(`song-${songId}`);
+                    if (songElement) {
+                        songElement.remove();
+                    }
+
+                    // Check if playlist is empty
+                    const playlist = document.getElementById('playlist');
+                    if (playlist.children.length === 0) {
+                        document.getElementById('emptyMessage').style.display = 'block';
+                    }
+                } else {
+                    alert('Failed to delete the song.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during deletion:', error);
+                alert('An error occurred while deleting the song.');
+            });
+        }
+    </script>
+
+</body>
+</html>

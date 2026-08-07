@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One AJAX Fetch DELETE Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+
+        .main-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .dashboard-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 850px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bg-spotify { background-color: #1db954; }
+        .bg-flipkart { background-color: #2874f0; }
+        .bg-bookmyshow { background-color: #f12545; }
+        .bg-debug { background-color: #4a5568; }
+
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* 1. Spotify Styles */
+        .spotify-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .spotify-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #181818;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .btn-spotify-del {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* 2. Flipkart Styles */
+        .flipkart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .btn-flipkart-remove {
+            background-color: transparent;
+            color: #fb641b;
+            border: 1px solid #fb641b;
+            padding: 6px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .btn-flipkart-remove:hover {
+            background-color: #fb641b;
+            color: white;
+        }
+
+        /* 3. BookMyShow Styles */
+        .bms-item {
+            background-color: #f9fafb;
+            border-left: 4px solid #f12545;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-bms-del {
+            background-color: #f12545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* 4. Debugger Styles */
+        .debug-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+            margin-bottom: 12px;
+        }
+        .debug-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #edf2f7;
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .btn-debug {
+            background-color: #319795;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .empty-text {
+            color: #888;
+            font-style: italic;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-header">
+        <h1>AJAX Fetch DELETE Operations Dashboard</h1>
+        <p>Single application demonstrating all 4 AJAX DELETE functionalities</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <!-- TASK 1: SPOTIFY PLAYLIST -->
+        <div class="card">
+            <div class="card-header bg-spotify">
+                <span>1. Spotify Playlist</span>
+                <small>AJAX DELETE Song</small>
+            </div>
+            <div class="card-body">
+                <ul class="spotify-list" id="spotifyList">
+                    <li class="spotify-item" id="song-1">
+                        <div>
+                            <strong>Blinding Lights</strong><br>
+                            <small style="color:#b3b3b3;">The Weeknd</small>
+                        </div>
+                        <button class="btn-spotify-del" onclick="deleteSpotifySong(1)">Delete</button>
+                    </li>
+                    <li class="spotify-item" id="song-2">
+                        <div>
+                            <strong>Shape of You</strong><br>
+                            <small style="color:#b3b3b3;">Ed Sheeran</small>
+                        </div>
+                        <button class="btn-spotify-del" onclick="deleteSpotifySong(2)">Delete</button>
+                    </li>
+                    <li class="spotify-item" id="song-3">
+                        <div>
+                            <strong>Starboy</strong><br>
+                            <small style="color:#b3b3b3;">The Weeknd</small>
+                        </div>
+                        <button class="btn-spotify-del" onclick="deleteSpotifySong(3)">Delete</button>
+                    </li>
+                </ul>
+                <div id="spotifyEmpty" class="empty-text">Spotify playlist is empty.</div>
+            </div>
+        </div>
+
+        <!-- TASK 2: FLIPKART WISHLIST -->
+        <div class="card">
+            <div class="card-header bg-flipkart">
+                <span>2. Flipkart Wishlist</span>
+                <small>Remove Product without Reload</small>
+            </div>
+            <div class="card-body">
+                <div id="flipkartContainer">
+                    {% for product in products %}
+                    <div class="flipkart-item" id="product-{{ product.id }}">
+                        <div>
+                            <strong>{{ product.name }}</strong><br>
+                            <span style="color:#212121; font-weight:bold;">{{ product.price }}</span>
+                        </div>
+                        <button class="btn-flipkart-remove" onclick="removeFlipkartWishlist({{ product.id }})">Remove from Wishlist</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="flipkartEmpty" class="empty-text">Wishlist is currently empty.</div>
+            </div>
+        </div>
+
+        <!-- TASK 3: BOOKMYSHOW WATCH LATER -->
+        <div class="card">
+            <div class="card-header bg-bookmyshow">
+                <span>3. BookMyShow Watch Later</span>
+                <small>JSON Request & Dynamic Success Alert</small>
+            </div>
+            <div class="card-body">
+                <!-- Dynamic Success Message Banner -->
+                <div id="bmsSuccessAlert" class="alert-success"></div>
+
+                <div id="bmsContainer">
+                    <div class="bms-item" id="movie-101">
+                        <div>
+                            <strong>Kalki 2898 AD</strong><br>
+                            <small style="color:#666;">Action / Sci-Fi</small>
+                        </div>
+                        <button class="btn-bms-del" onclick="removeBmsMovie(101, 'Kalki 2898 AD')">Remove</button>
+                    </div>
+                    <div class="bms-item" id="movie-102">
+                        <div>
+                            <strong>Stree 2</strong><br>
+                            <small style="color:#666;">Comedy / Horror</small>
+                        </div>
+                        <button class="btn-bms-del" onclick="removeBmsMovie(102, 'Stree 2')">Remove</button>
+                    </div>
+                    <div class="bms-item" id="movie-103">
+                        <div>
+                            <strong>Pushpa 2: The Rule</strong><br>
+                            <small style="color:#666;">Action / Thriller</small>
+                        </div>
+                        <button class="btn-bms-del" onclick="removeBmsMovie(103, 'Pushpa 2: The Rule')">Remove</button>
+                    </div>
+                </div>
+                <div id="bmsEmpty" class="empty-text">No movies in Watch Later.</div>
+            </div>
+        </div>
+
+        <!-- TASK 4: DEBUG SCENARIO & FIX -->
+        <div class="card">
+            <div class="card-header bg-debug">
+                <span>4. Playlist Debug & Fix</span>
+                <small>Issue & Working Fix Demonstration</small>
+            </div>
+            <div class="card-body">
+                <p style="margin-top:0; font-size:13px; color:#4a5568;">
+                    <strong>Issue:</strong> Deletion fetch request succeeded, but playlist remained because <code>element.remove()</code> was missing.
+                </p>
+                <div class="debug-code">
+// Fixed Code: Removes DOM element on response.ok
+fetch(`/api/delete-item/${id}`, { method: 'DELETE' })
+.then(res => { if(res.ok) document.getElementById(id).remove(); });
+                </div>
+                <div id="debugContainer">
+                    <div class="debug-item" id="debug-playlist-1">
+                        <span><strong>90s Retro Hits</strong></span>
+                        <button class="btn-debug" onclick="deleteDebugPlaylist(1)">Delete (Fixed)</button>
+                    </div>
+                    <div class="debug-item" id="debug-playlist-2">
+                        <span><strong>Workout EDM Mix</strong></span>
+                        <button class="btn-debug" onclick="deleteDebugPlaylist(2)">Delete (Fixed)</button>
+                    </div>
+                </div>
+                <div id="debugEmpty" class="empty-text">All playlists removed.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // TASK 1: Spotify Delete Function
+        function deleteSpotifySong(songId) {
+            fetch(`/api/delete-item/${songId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    const songElement = document.getElementById(`song-${songId}`);
+                    if (songElement) {
+                        songElement.remove();
+                    }
+                    checkEmpty('spotifyList', 'spotifyEmpty');
+                }
+            })
+            .catch(err => console.error('Spotify Delete Error:', err));
+        }
+
+        // TASK 2: Flipkart Remove from Wishlist Function
+        function removeFlipkartWishlist(productId) {
+            fetch(`/api/wishlist/${productId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const card = document.getElementById(`product-${productId}`);
+                    if (card) {
+                        card.remove(); // Removes element from UI without page reload
+                    }
+                    checkEmpty('flipkartContainer', 'flipkartEmpty');
+                }
+            })
+            .catch(err => console.error('Flipkart Delete Error:', err));
+        }
+
+        // TASK 3: BookMyShow Remove Movie (JSON request & dynamic message)
+        function removeBmsMovie(movieId, movieTitle) {
+            fetch(`/api/watchlater/${movieId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: movieId, title: movieTitle })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove element from DOM
+                    const movieElem = document.getElementById(`movie-${movieId}`);
+                    if (movieElem) {
+                        movieElem.remove();
+                    }
+
+                    // Display dynamic success alert
+                    const alertBox = document.getElementById('bmsSuccessAlert');
+                    alertBox.innerText = data.message;
+                    alertBox.style.display = 'block';
+
+                    setTimeout(() => {
+                        alertBox.style.display = 'none';
+                    }, 4000);
+
+                    checkEmpty('bmsContainer', 'bmsEmpty');
+                }
+            })
+            .catch(err => console.error('BookMyShow Delete Error:', err));
+        }
+
+        // TASK 4: Debugger Playlist Delete Function (With DOM Removal Fix)
+        function deleteDebugPlaylist(playlistId) {
+            fetch(`/api/delete-item/${playlistId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // FIX: Removing DOM element after successful response
+                    const playlistElem = document.getElementById(`debug-playlist-${playlistId}`);
+                    if (playlistElem) {
+                        playlistElem.remove();
+                    }
+                    checkEmpty('debugContainer', 'debugEmpty');
+                }
+            })
+            .catch(err => console.error('Debug Delete Error:', err));
+        }
+
+        // Helper function to show empty status
+        function checkEmpty(containerId, emptyId) {
+            const container = document.getElementById(containerId);
+            if (container && container.children.length === 0) {
+                document.getElementById(emptyId).style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
