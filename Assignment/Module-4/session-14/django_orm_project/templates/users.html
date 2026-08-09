@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block content %}
+<div class="task-card">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">2</div>
+            <div>
+                <h1 class="task-title">User Management &amp; Exclude Query</h1>
+                <p class="task-desc">Filter non-Gmail users using exclude(email__contains='gmail.com')</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Buttons & Search -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="btn-group">
+            <a href="?tab=exclude" class="btn {% if active_tab == 'exclude' %}btn-primary{% else %}btn-secondary{% endif %}">
+                Non-Gmail Users (exclude)
+            </a>
+            <a href="?tab=gmail" class="btn {% if active_tab == 'gmail' %}btn-primary{% else %}btn-secondary{% endif %}">
+                Gmail Users
+            </a>
+            <a href="?tab=all" class="btn {% if active_tab == 'all' %}btn-primary{% else %}btn-secondary{% endif %}">
+                All Users
+            </a>
+        </div>
+
+        <form method="GET" style="display: flex; gap: 8px;">
+            <input type="hidden" name="tab" value="{{ active_tab }}">
+            <input type="text" name="q" value="{{ search_q }}" placeholder="🔍 Search user..." class="form-control" style="width: 220px;">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+    </div>
+
+    <!-- ORM Query Box -->
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ query_code }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Email Address</th>
+                    <th>Domain Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ user.username }}</td>
+                    <td>{{ user.first_name|default:'-' }}</td>
+                    <td><code>{{ user.email }}</code></td>
+                    <td>
+                        {% if 'gmail.com' in user.email %}
+                            <span class="pill pill-green">Gmail</span>
+                        {% else %}
+                            <span class="pill pill-caramel">Non-Gmail</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted);">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

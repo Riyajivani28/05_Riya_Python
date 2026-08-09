@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2 style="color: var(--brown-dark); margin-bottom: 1.5rem;">{{ title }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="form-label">Restaurant Name</label>
+            <input type="text" name="name" value="{{ restaurant.name|default:'' }}" class="form-control" required placeholder="e.g. Golden Dragon">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Cuisine</label>
+            <input type="text" name="cuisine" value="{{ restaurant.cuisine|default:'' }}" class="form-control" required placeholder="e.g. Chinese, Indian, Italian">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Rating (0.0 - 5.0)</label>
+            <input type="number" step="0.1" min="0" max="5" name="rating" value="{{ restaurant.rating|default:'4.5' }}" class="form-control" required>
+        </div>
+
+        <div class="btn-group" style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary">Save Restaurant</button>
+            <a href="{% url 'restaurants' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

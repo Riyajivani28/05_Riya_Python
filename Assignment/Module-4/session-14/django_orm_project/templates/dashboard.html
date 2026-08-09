@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+
+{% block title %}Django ORM Master Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Hero Banner & Overview Stats -->
+<div class="hero-banner">
+    <h1 class="hero-title">Django ORM Query Demonstration</h1>
+    <p class="hero-subtitle">
+        Real-time dynamic database platform demonstrating 5 key Django ORM operations: <code>filter()</code>, <code>exclude()</code>, <code>annotate()</code> with <code>Count()</code>, <code>select_related()</code>, and <code>Q()</code> objects with <code>Paginator</code>.
+    </p>
+
+    <!-- Overview Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_restaurants }}</div>
+            <div class="stat-label">Total Restaurants</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_users }}</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_movies }}</div>
+            <div class="stat-label">Total Movies</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_reviews }}</div>
+            <div class="stat-label">Total Reviews</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_products }}</div>
+            <div class="stat-label">Total Products</div>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 1: RESTAURANT FILTER -->
+<div class="task-card" id="task1">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">1</div>
+            <div>
+                <h2 class="task-title">Restaurant Management &amp; Filter</h2>
+                <p class="task-desc">Filter: Chinese cuisine + Rating &gt; 4.0</p>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="{% url 'restaurant_add' %}" class="btn btn-primary btn-sm">➕ Add Restaurant</a>
+            <a href="{% url 'restaurants' %}" class="btn btn-secondary btn-sm">Manage All &rarr;</a>
+        </div>
+    </div>
+
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ t1_query }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Restaurant Name</th>
+                    <th>Cuisine</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rest in t1_results %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ rest.name }}</td>
+                    <td><span class="pill pill-brown">{{ rest.cuisine }}</span></td>
+                    <td style="font-weight: 800; color: var(--brown-medium);">★ {{ rest.rating }}</td>
+                    <td>
+                        <a href="{% url 'restaurant_edit' rest.id %}" class="btn btn-secondary btn-sm">✏️ Edit</a>
+                        <a href="{% url 'restaurant_delete' rest.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Delete {{ rest.name }}?');">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted);">No matching restaurants found in database.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECTION 2: USER EXCLUDE -->
+<div class="task-card" id="task2">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">2</div>
+            <div>
+                <h2 class="task-title">User Management &amp; Exclude Query</h2>
+                <p class="task-desc">Non-Gmail Users using exclude() lookup</p>
+            </div>
+        </div>
+        <a href="{% url 'users' %}" class="btn btn-secondary btn-sm">View User Management &rarr;</a>
+    </div>
+
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ t2_query }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Email Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in t2_results %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ user.username }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td><code>{{ user.email }}</code></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted);">No non-gmail users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECTION 3: MOVIE ANNOTATE -->
+<div class="task-card" id="task3">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">3</div>
+            <div>
+                <h2 class="task-title">Movie &amp; Review Management (Annotate)</h2>
+                <p class="task-desc">Movie-wise review count using annotate() and Count()</p>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="{% url 'movie_add' %}" class="btn btn-primary btn-sm">➕ Add Movie</a>
+            <a href="{% url 'review_add' %}" class="btn btn-secondary btn-sm">✍️ Add Review</a>
+            <a href="{% url 'movies' %}" class="btn btn-secondary btn-sm">View All &rarr;</a>
+        </div>
+    </div>
+
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ t3_query }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Movie Name</th>
+                    <th>Review Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in t3_results %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ movie.name }}</td>
+                    <td>
+                        <span class="pill {% if movie.review_count > 0 %}pill-green{% else %}pill-caramel{% endif %}">
+                            {{ movie.name }} &rarr; {{ movie.review_count }} Review{% if movie.review_count != 1 %}s{% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" style="text-align: center; color: var(--text-muted);">No movies found in database.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECTION 4: PRODUCT SELECT RELATED -->
+<div class="task-card" id="task4">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">4</div>
+            <div>
+                <h2 class="task-title">Category &amp; Product Management (Select Related)</h2>
+                <p class="task-desc">Product + Category in single SQL query using select_related()</p>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="{% url 'category_add' %}" class="btn btn-primary btn-sm">➕ Add Category</a>
+            <a href="{% url 'product_add' %}" class="btn btn-secondary btn-sm">➕ Add Product</a>
+            <a href="{% url 'products' %}" class="btn btn-secondary btn-sm">Manage Products &rarr;</a>
+        </div>
+    </div>
+
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ t4_query }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Category Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in t4_results %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ product.name }}</td>
+                    <td><span class="pill pill-brown">{{ product.category.name }}</span></td>
+                    <td style="font-weight: 800; color: var(--brown-dark);">₹{{ product.price }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted);">No products found in database.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SECTION 5: FLIPKART STYLE STORE (Q OBJECTS & PAGINATOR) -->
+<div class="task-card" id="task5">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">5</div>
+            <div>
+                <h2 class="task-title">Flipkart-style Product Store 🛒 (Q Filter &amp; Paginator)</h2>
+                <p class="task-desc">Electronics OR Price &lt; ₹1000 with Paginator (5 items per page)</p>
+            </div>
+        </div>
+        <a href="{% url 'flipkart' %}" class="btn btn-primary btn-sm">Open Flipkart Store 🛒</a>
+    </div>
+
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ t5_query }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Category Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in t5_results %}
+                <tr>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ product.name }}</td>
+                    <td><span class="pill pill-brown">{{ product.category.name }}</span></td>
+                    <td style="font-weight: 800; color: var(--brown-dark);">₹{{ product.price }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted);">No products matching Q() filter.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-wrapper" style="margin-top: 1rem;">
+        <div class="pagination-info">
+            Page <strong>{{ t5_results.number }}</strong> of <strong>{{ t5_results.paginator.num_pages }}</strong> (Total {{ t5_results.paginator.count }} products)
+        </div>
+        <div class="pagination-controls">
+            {% if t5_results.has_previous %}
+                <a href="?page={{ t5_results.previous_page_number }}#task5" class="page-link">&lsaquo; Previous</a>
+            {% else %}
+                <span class="page-link disabled">&lsaquo; Previous</span>
+            {% endif %}
+
+            {% for num in t5_results.paginator.page_range %}
+                {% if t5_results.number == num %}
+                    <span class="page-link active">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}#task5" class="page-link">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if t5_results.has_next %}
+                <a href="?page={{ t5_results.next_page_number }}#task5" class="page-link">Next &rsaquo;</a>
+            {% else %}
+                <span class="page-link disabled">Next &rsaquo;</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

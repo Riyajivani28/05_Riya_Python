@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Restaurant Management{% endblock %}
+
+{% block content %}
+<div class="task-card">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">1</div>
+            <div>
+                <h1 class="task-title">Restaurant Management</h1>
+                <p class="task-desc">Filter: Chinese + Rating &gt; 4.0 | Add, Edit &amp; Delete Restaurants</p>
+            </div>
+        </div>
+        <a href="{% url 'restaurant_add' %}" class="btn btn-primary">➕ Add Restaurant</a>
+    </div>
+
+    <!-- Filter & Search Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="btn-group">
+            <a href="?filter=task" class="btn {% if filter_mode == 'task' %}btn-primary{% else %}btn-secondary{% endif %}">
+                Filter: Chinese + Rating &gt; 4
+            </a>
+            <a href="?filter=all" class="btn {% if filter_mode == 'all' %}btn-primary{% else %}btn-secondary{% endif %}">
+                All Restaurants
+            </a>
+        </div>
+
+        <form method="GET" style="display: flex; gap: 8px;">
+            <input type="hidden" name="filter" value="{{ filter_mode }}">
+            <input type="text" name="q" value="{{ search_query }}" placeholder="🔍 Search restaurant..." class="form-control" style="width: 220px;">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+    </div>
+
+    <!-- ORM Query Used -->
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ query_code }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Restaurant Name</th>
+                    <th>Cuisine</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rest in restaurants %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ rest.name }}</td>
+                    <td><span class="pill pill-brown">{{ rest.cuisine }}</span></td>
+                    <td style="font-weight: 800; color: var(--brown-medium);">★ {{ rest.rating }}</td>
+                    <td>
+                        <a href="{% url 'restaurant_edit' rest.id %}" class="btn btn-secondary btn-sm">✏️ Edit</a>
+                        <a href="{% url 'restaurant_delete' rest.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete {{ rest.name }}?');">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted);">No restaurants found matching filter.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

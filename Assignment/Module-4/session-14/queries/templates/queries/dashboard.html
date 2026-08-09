@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django ORM Master Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light & Dark Brown Theme Palette */
+            --bg-primary: #f8f4ee;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f3ece2;
+            --brown-dark: #3d2314;
+            --brown-medium: #674229;
+            --brown-light: #b47b48;
+            --brown-accent: #d99b66;
+            --brown-soft-bg: #f3e8de;
+            --text-main: #2c1d11;
+            --text-muted: #786454;
+            --border-color: #e6dccf;
+            --shadow-sm: 0 2px 4px rgba(61, 35, 20, 0.04);
+            --shadow-md: 0 6px 16px rgba(61, 35, 20, 0.06);
+            --accent-emerald: #2e7d32;
+            --emerald-bg: #e8f5e9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Header / Navbar */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--brown-dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--brown-dark), var(--brown-light));
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(61, 35, 20, 0.2);
+        }
+
+        .badge-tag {
+            background: var(--brown-soft-bg);
+            color: var(--brown-dark);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border-left: 6px solid var(--brown-dark);
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--brown-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Stats Bar */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--brown-dark);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Nav Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--brown-dark);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--brown-dark), var(--brown-medium));
+            border-color: var(--brown-dark);
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(61, 35, 20, 0.2);
+        }
+
+        .tab-badge {
+            background: rgba(61, 35, 20, 0.08);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            color: var(--brown-dark);
+        }
+
+        .tab-btn.active .tab-badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        /* Task Cards Container */
+        .task-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: border-color 0.2s ease;
+        }
+
+        .task-card:hover {
+            border-color: var(--brown-light);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .task-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .task-number {
+            background: linear-gradient(135deg, var(--brown-dark), var(--brown-light));
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .task-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--brown-dark);
+        }
+
+        .task-desc {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            margin-top: 2px;
+        }
+
+        /* Data Tables */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: var(--bg-primary);
+            color: var(--brown-dark);
+            font-weight: 700;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: #faf5ef;
+        }
+
+        /* Status Pills & Badges */
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pill-green {
+            background: var(--emerald-bg);
+            color: var(--accent-emerald);
+            border: 1px solid #a7f3d0;
+        }
+
+        .pill-brown {
+            background: var(--brown-soft-bg);
+            color: var(--brown-dark);
+            border: 1px solid #dfcbb9;
+        }
+
+        .pill-caramel {
+            background: #fff3e0;
+            color: #b76e00;
+            border: 1px solid #ffe0b2;
+        }
+
+        /* Product Grid (Task 5 Flipkart Style) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--brown-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: var(--brown-soft-bg);
+            color: var(--brown-dark);
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid #dfcbb9;
+        }
+
+        .product-name {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: var(--brown-dark);
+            margin-bottom: 6px;
+            padding-right: 50px;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .product-price {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--brown-dark);
+        }
+
+        .q-match-pill {
+            font-size: 0.7rem;
+            background: var(--brown-soft-bg);
+            color: var(--brown-medium);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Pagination Styles */
+        .pagination-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+        }
+
+        .pagination-info {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 10px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--brown-dark);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .page-link:hover:not(.disabled):not(.active) {
+            background: var(--bg-card-hover);
+            border-color: var(--brown-light);
+        }
+
+        .page-link.active {
+            background: var(--brown-dark);
+            color: #ffffff;
+            border-color: var(--brown-dark);
+            font-weight: 800;
+        }
+
+        .page-link.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container { padding: 0.5rem 1rem; }
+            .hero-title { font-size: 1.5rem; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="logo">
+                <div class="logo-icon">Py</div>
+                <span>Django ORM Dashboard</span>
+            </a>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span class="badge-tag"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Hero Header -->
+        <div class="hero-banner">
+            <h1 class="hero-title">Django ORM Queries & Pagination</h1>
+            <p class="hero-subtitle">
+                Demonstrating <code>filter()</code>, <code>exclude()</code>, <code>annotate()</code>, <code>select_related()</code>, <code>Q()</code> objects, and <code>Paginator</code>.
+            </p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">{{ all_restaurants_count }}</div>
+                    <div class="stat-label">Restaurants</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ all_users_count }}</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ all_movies_count }}</div>
+                    <div class="stat-label">Movies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ all_products_count }}</div>
+                    <div class="stat-label">Products</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="showTab('all', this)">
+                All Tasks <span class="tab-badge">5</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('task1', this)">
+                1. Restaurant Filter <span class="tab-badge">{{ task1_results|length }}</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('task2', this)">
+                2. User Exclude <span class="tab-badge">{{ task2_results|length }}</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('task3', this)">
+                3. Movie Annotate <span class="tab-badge">{{ task3_results|length }}</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('task4', this)">
+                4. Select Related <span class="tab-badge">{{ task4_results|length }}</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('task5', this)">
+                5. Q() & Paginator <span class="tab-badge">{{ task5_total_count }}</span>
+            </button>
+        </div>
+
+        <!-- TASK 1: RESTAURANT FILTER -->
+        <div class="task-card task-section" id="task1">
+            <div class="task-header">
+                <div class="task-title-group">
+                    <div class="task-number">1</div>
+                    <div>
+                        <h2 class="task-title">Restaurant Model & Filter Query</h2>
+                        <p class="task-desc">Filter all restaurants where cuisine is 'Chinese' and rating is strictly greater than 4.0</p>
+                    </div>
+                </div>
+                <span class="pill pill-green">Matched: {{ task1_results|length }} Restaurants</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Restaurant Name</th>
+                            <th>Cuisine</th>
+                            <th>Rating</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rest in task1_results %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="font-weight: 700; color: var(--brown-dark);">{{ rest.name }}</td>
+                            <td><span class="pill pill-brown">{{ rest.cuisine }}</span></td>
+                            <td style="color: var(--brown-medium); font-weight: 800;">★ {{ rest.rating }}</td>
+                            <td><span class="pill pill-green">Passes Filter</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-muted);">No matching restaurants found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TASK 2: USER EXCLUDE -->
+        <div class="task-card task-section" id="task2">
+            <div class="task-header">
+                <div class="task-title-group">
+                    <div class="task-number">2</div>
+                    <div>
+                        <h2 class="task-title">User Model & Exclude Query</h2>
+                        <p class="task-desc">Get all users who do NOT have 'gmail.com' in their email address using exclude()</p>
+                    </div>
+                </div>
+                <span class="pill pill-caramel">Non-Gmail Users: {{ task2_results|length }}</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Email Address</th>
+                            <th>Domain Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in task2_results %}
+                        <tr>
+                            <td style="font-weight: 700; color: var(--brown-dark);">{{ user.username }}</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td><code>{{ user.email }}</code></td>
+                            <td><span class="pill pill-caramel">Non-Gmail</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted);">No non-gmail users found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TASK 3: MOVIE & REVIEW ANNOTATE -->
+        <div class="task-card task-section" id="task3">
+            <div class="task-header">
+                <div class="task-title-group">
+                    <div class="task-number">3</div>
+                    <div>
+                        <h2 class="task-title">Movie & Review Model with Annotate()</h2>
+                        <p class="task-desc">Count the number of reviews for each movie and display movie title with review count</p>
+                    </div>
+                </div>
+                <span class="pill pill-brown">Annotated QuerySet</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Movie Title</th>
+                            <th>Genre</th>
+                            <th>Release Year</th>
+                            <th>Review Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movie in task3_results %}
+                        <tr>
+                            <td style="font-weight: 700; color: var(--brown-dark);">{{ movie.title }}</td>
+                            <td><span class="pill pill-brown">{{ movie.genre }}</span></td>
+                            <td>{{ movie.release_year }}</td>
+                            <td>
+                                <span class="pill {% if movie.review_count > 0 %}pill-green{% else %}pill-caramel{% endif %}">
+                                    {{ movie.review_count }} Review{% if movie.review_count != 1 %}s{% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted);">No movies found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TASK 4: PRODUCT & CATEGORY SELECT_RELATED -->
+        <div class="task-card task-section" id="task4">
+            <div class="task-header">
+                <div class="task-title-group">
+                    <div class="task-number">4</div>
+                    <div>
+                        <h2 class="task-title">Product & Category with select_related()</h2>
+                        <p class="task-desc">Fetch all products with their category names in a single query</p>
+                    </div>
+                </div>
+                <span class="pill pill-brown">Single Query JOIN</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>Category Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prod in task4_results %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="font-weight: 700; color: var(--brown-dark);">{{ prod.name }}</td>
+                            <td><span class="pill pill-brown">{{ prod.category.name }}</span></td>
+                            <td style="color: var(--brown-dark); font-weight: 800;">₹{{ prod.price }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted);">No products found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TASK 5: Q OBJECTS FILTER & PAGINATOR -->
+        <div class="task-card task-section" id="task5">
+            <div class="task-header">
+                <div class="task-title-group">
+                    <div class="task-number">5</div>
+                    <div>
+                        <h2 class="task-title">Flipkart-Style Products with Q() Objects & Paginator</h2>
+                        <p class="task-desc">Filter products in 'Electronics' category OR price &lt; 1000, paginated 5 products per page</p>
+                    </div>
+                </div>
+                <span class="pill pill-green">Total Matching: {{ task5_total_count }} Products</span>
+            </div>
+
+            <!-- Flipkart Products Cards Grid -->
+            <div class="products-grid">
+                {% for prod in task5_results %}
+                <div class="product-card">
+                    <span class="product-badge">{{ prod.badge }}</span>
+                    <div>
+                        <h3 class="product-name">{{ prod.name }}</h3>
+                        <div class="product-category">Category: <strong>{{ prod.category.name }}</strong></div>
+                    </div>
+                    <div class="product-price-row">
+                        <div class="product-price">₹{{ prod.price }}</div>
+                        <span class="q-match-pill">
+                            {% if prod.category.name == 'Electronics' and prod.price < 1000 %}
+                                Electronics &lt; ₹1000
+                            {% elif prod.category.name == 'Electronics' %}
+                                Electronics
+                            {% else %}
+                                Price &lt; ₹1000
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% empty %}
+                <p style="color: var(--text-muted); grid-column: 1 / -1;">No products found matching filter.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Showing Page <strong>{{ task5_results.number }}</strong> of <strong>{{ task5_results.paginator.num_pages }}</strong> ({{ task5_total_count }} total products matched)
+                </div>
+                <div class="pagination-controls">
+                    {% if task5_results.has_previous %}
+                        <a href="?page=1#task5" class="page-link" title="First Page">&laquo;</a>
+                        <a href="?page={{ task5_results.previous_page_number }}#task5" class="page-link">&lsaquo; Prev</a>
+                    {% else %}
+                        <span class="page-link disabled">&laquo;</span>
+                        <span class="page-link disabled">&lsaquo; Prev</span>
+                    {% endif %}
+
+                    {% for num in task5_results.paginator.page_range %}
+                        {% if task5_results.number == num %}
+                            <span class="page-link active">{{ num }}</span>
+                        {% else %}
+                            <a href="?page={{ num }}#task5" class="page-link">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if task5_results.has_next %}
+                        <a href="?page={{ task5_results.next_page_number }}#task5" class="page-link">Next &rsaquo;</a>
+                        <a href="?page={{ task5_results.paginator.num_pages }}#task5" class="page-link" title="Last Page">&raquo;</a>
+                    {% else %}
+                        <span class="page-link disabled">Next &rsaquo;</span>
+                        <span class="page-link disabled">&raquo;</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tab filter JS script -->
+    <script>
+        function showTab(tabId, element) {
+            // Update tab button active states
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            // Show / hide task sections
+            const sections = document.querySelectorAll('.task-section');
+            if (tabId === 'all') {
+                sections.forEach(sec => sec.style.display = 'block');
+            } else {
+                sections.forEach(sec => {
+                    if (sec.id === tabId) {
+                        sec.style.display = 'block';
+                    } else {
+                        sec.style.display = 'none';
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

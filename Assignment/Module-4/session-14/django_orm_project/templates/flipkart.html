@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Flipkart-style Product Store 🛒{% endblock %}
+
+{% block content %}
+<div class="task-card">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">5</div>
+            <div>
+                <h1 class="task-title">Flipkart Store 🛒 (Q Objects &amp; Paginator)</h1>
+                <p class="task-desc">Filter matching Electronics OR Price &lt; ₹1000 | 5 items per page</p>
+            </div>
+        </div>
+
+        <!-- Q Filter Toggle Button -->
+        <div class="btn-group">
+            {% if q_active == 'on' %}
+                <a href="?q_filter=off" class="btn btn-primary">
+                    ⚡ Q() Filter Active: Electronics OR Price &lt; ₹1000 (Click to Show All)
+                </a>
+            {% else %}
+                <a href="?q_filter=on" class="btn btn-secondary">
+                    🔍 Apply Q() Filter: Electronics OR Price &lt; ₹1000
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <form method="GET" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 1.5rem;">
+        <input type="hidden" name="q_filter" value="{{ q_active }}">
+        
+        <select name="category" class="form-control" style="width: 200px;" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if selected_cat == cat.id|stringformat:"i" %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="q" value="{{ search_q }}" placeholder="🔍 Search Flipkart products..." class="form-control" style="width: 260px;">
+        <button type="submit" class="btn btn-secondary">Search</button>
+
+        {% if selected_cat or search_q %}
+            <a href="{% url 'flipkart' %}" class="btn btn-danger btn-sm">Clear Filters</a>
+        {% endif %}
+    </form>
+
+    <!-- ORM Query Box -->
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ query_code }}</code>
+    </div>
+
+    <!-- Flipkart Product Cards Grid -->
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-img-box">
+                {% if product.category.name == 'Electronics' %}📱
+                {% elif product.category.name == 'Fashion' %}👕
+                {% elif product.category.name == 'Books' %}📚
+                {% else %}🏠{% endif %}
+            </div>
+
+            <div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <div class="product-category">Category: <strong>{{ product.category.name }}</strong></div>
+                <div class="product-rating">Rating: ★ {{ product.rating }} / 5.0</div>
+            </div>
+
+            <div class="product-price-row">
+                <div class="product-price">₹{{ product.price }}</div>
+                <span class="pill pill-brown">
+                    {% if product.category.name == 'Electronics' and product.price < 1000 %}
+                        Electronics &lt; ₹1k
+                    {% elif product.category.name == 'Electronics' %}
+                        Electronics
+                    {% else %}
+                        Price &lt; ₹1k
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
+            No products found matching Q() filter and criteria.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls (5 products per page) -->
+    <div class="pagination-wrapper">
+        <div class="pagination-info">
+            Showing Page <strong>{{ products.number }}</strong> of <strong>{{ products.paginator.num_pages }}</strong> (Total {{ products.paginator.count }} items matched)
+        </div>
+        
+        <div class="pagination-controls">
+            {% if products.has_previous %}
+                <a href="?q_filter={{ q_active }}&category={{ selected_cat }}&q={{ search_q }}&page={{ products.previous_page_number }}" class="page-link">&lsaquo; Previous</a>
+            {% else %}
+                <span class="page-link disabled">&lsaquo; Previous</span>
+            {% endif %}
+
+            {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                    <span class="page-link active">{{ num }}</span>
+                {% else %}
+                    <a href="?q_filter={{ q_active }}&category={{ selected_cat }}&q={{ search_q }}&page={{ num }}" class="page-link">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if products.has_next %}
+                <a href="?q_filter={{ q_active }}&category={{ selected_cat }}&q={{ search_q }}&page={{ products.next_page_number }}" class="page-link">Next &rsaquo;</a>
+            {% else %}
+                <span class="page-link disabled">Next &rsaquo;</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

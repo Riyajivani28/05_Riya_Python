@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Django ORM Master Platform{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="{% url 'dashboard' %}" class="logo">
+                <div class="logo-icon">Py</div>
+                <span>Django ORM Hub</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{% url 'dashboard' %}">🏠 Dashboard</a></li>
+                <li><a href="{% url 'restaurants' %}">🍽️ Restaurants</a></li>
+                <li><a href="{% url 'users' %}">👥 Users</a></li>
+                <li><a href="{% url 'movies' %}">🎬 Movies &amp; Reviews</a></li>
+                <li><a href="{% url 'products' %}">📦 Products</a></li>
+                <li><a href="{% url 'flipkart' %}" style="color: var(--brown-dark); font-weight: 800;">🛒 Flipkart Store</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

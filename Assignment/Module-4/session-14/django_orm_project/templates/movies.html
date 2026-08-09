@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Movie & Review Management{% endblock %}
+
+{% block content %}
+<div class="task-card">
+    <div class="task-header">
+        <div class="task-title-group">
+            <div class="task-number">3</div>
+            <div>
+                <h1 class="task-title">Movie &amp; Review Management</h1>
+                <p class="task-desc">Movie-wise review count using annotate() and Count()</p>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="{% url 'movie_add' %}" class="btn btn-primary">➕ Add Movie</a>
+            <a href="{% url 'review_add' %}" class="btn btn-secondary">✍️ Add Review</a>
+        </div>
+    </div>
+
+    <!-- ORM Query Box -->
+    <div class="orm-box">
+        <div class="orm-box-title">ORM Query Used</div>
+        <code>{{ query_code }}</code>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Movie Name</th>
+                    <th>Annotated Review Count</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in movies %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td style="font-weight: 700; color: var(--brown-dark);">{{ movie.name }}</td>
+                    <td>
+                        <strong style="color: var(--brown-dark); font-size: 1rem;">
+                            {{ movie.name }} &rarr; {{ movie.review_count }} Review{% if movie.review_count != 1 %}s{% endif %}
+                        </strong>
+                    </td>
+                    <td>
+                        <span class="pill {% if movie.review_count > 0 %}pill-green{% else %}pill-caramel{% endif %}">
+                            {{ movie.review_count }} Counted
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-muted);">No movies found in database.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
