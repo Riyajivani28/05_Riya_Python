@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders - Zomato Style | OmniCraft Hub{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header-container d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+        <span class="badge bg-warning text-dark fw-bold mb-2"><i class="bi bi-bag-fill me-1"></i>Zomato Style Order History</span>
+        <h2 class="fw-bold mb-1 text-dark"><i class="bi bi-receipt text-primary me-2"></i>My Orders</h2>
+        <p class="text-muted small mb-0">Order records for logged-in user: <strong>{{ user.username }}</strong> (Isolated DB Queries)</p>
+    </div>
+    <div class="d-flex gap-2 align-items-center">
+        <span class="badge bg-white text-dark border px-3 py-2 fs-6 shadow-sm">
+            Total Orders: <strong>{{ total_count }}</strong>
+        </span>
+        <span class="badge bg-primary text-white px-3 py-2 fs-6 shadow-sm">
+            Total Spent: <strong>${{ total_spent|floatformat:2 }}</strong>
+        </span>
+    </div>
+</div>
+
+{% if orders %}
+    <div class="card border-0 shadow-sm overflow-hidden mb-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="py-3 ps-4">Order ID</th>
+                        <th scope="col" class="py-3">Product Name</th>
+                        <th scope="col" class="py-3">Quantity</th>
+                        <th scope="col" class="py-3">Unit Price</th>
+                        <th scope="col" class="py-3">Total Amount</th>
+                        <th scope="col" class="py-3">Current Status</th>
+                        <th scope="col" class="py-3 text-end pe-4">Ordered Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td class="ps-4 fw-bold text-secondary font-monospace">#ORD-{{ order.id }}</td>
+                            <td>
+                                <div class="fw-semibold text-dark">{{ order.product_name }}</div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">{{ order.quantity }}</span></td>
+                            <td>${{ order.price }}</td>
+                            <td class="fw-bold text-primary">${{ order.total_price }}</td>
+                            <td>
+                                {% if order.status == 'Delivered' %}
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+                                        <i class="bi bi-check-circle me-1"></i>Delivered
+                                    </span>
+                                {% elif order.status == 'Processing' or order.status == 'Out for Delivery' %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">
+                                        <i class="bi bi-truck me-1"></i>{{ order.status }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">
+                                        <i class="bi bi-clock me-1"></i>{{ order.status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4 text-muted small">{{ order.ordered_at|date:"M d, Y - H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="card p-5 text-center border-0 shadow-sm">
+        <div class="my-3">
+            <i class="bi bi-basket text-muted display-4"></i>
+        </div>
+        <h5 class="fw-bold text-secondary">No Orders Found</h5>
+        <p class="text-muted small">You haven't placed any orders yet on your account.</p>
+        <div class="mt-2">
+            <a href="{% url 'buyer_dashboard' %}" class="btn btn-primary btn-sm">Browse Products & Order</a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

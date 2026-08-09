@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if edit_mode %}Edit Product{% else %}Post Product{% endif %} - Flipkart Style | OmniCraft Hub{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header-container d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+        <span class="badge bg-primary text-white fw-bold mb-2"><i class="bi bi-shop me-1"></i>Flipkart Style Seller Portal</span>
+        <h2 class="fw-bold mb-1 text-dark">
+            <i class="bi bi-{% if edit_mode %}pencil-square{% else %}plus-square-fill{% endif %} text-primary me-2"></i>
+            {% if edit_mode %}Edit Product: {{ product.name }}{% else %}Post New Product{% endif %}
+        </h2>
+        <p class="text-muted small mb-0">Restricted access view — Seller group permission enforced</p>
+    </div>
+    <a href="{% url 'seller_dashboard' %}" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Seller Dashboard
+    </a>
+</div>
+
+<div class="row justify-content-center my-3">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h5 class="fw-bold mb-0 text-dark">Product Specification Form</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label font-weight-medium">Product Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label font-weight-medium">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small mt-1">{{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label for="{{ form.price.id_for_label }}" class="form-label font-weight-medium">Price ($)</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}
+                            <div class="text-danger small mt-1">{{ form.price.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'seller_dashboard' %}" class="btn btn-light border">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-lg me-1"></i> {% if edit_mode %}Save Changes{% else %}Post Product{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

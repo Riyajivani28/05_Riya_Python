@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign In - OmniCraft Hub{% endblock %}
+
+{% block content %}
+<style>
+    .login-image-side {
+        background: linear-gradient(to top, rgba(234, 88, 12, 0.95) 0%, rgba(234, 88, 12, 0.4) 50%, rgba(0,0,0,0.1) 100%), url('{% static "app/images/login_image.png" %}') no-repeat center center;
+        background-size: cover;
+    }
+</style>
+<div class="row justify-content-center my-4">
+    <div class="col-lg-10">
+        <div class="card overflow-hidden shadow-lg border-0" style="border-radius: 16px;">
+            <div class="row g-0 align-items-stretch">
+                <!-- Image Side -->
+                <div class="col-md-6 d-none d-md-block login-image-side">
+                    <div class="h-100 w-100 d-flex flex-column justify-content-end p-5 text-white">
+                        <h2 class="fw-bold mb-2">Welcome to OmniCraft Hub</h2>
+                        <p class="mb-0 text-white-50">Your ultimate destination for shopping, dining, and cinema.</p>
+                    </div>
+                </div>
+                
+                <!-- Form Side -->
+                <div class="col-md-6 p-4 p-md-5 d-flex flex-column justify-content-center bg-white">
+                    <div class="text-center mb-4">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 58px; height: 58px;">
+                            <i class="bi bi-shield-lock fs-2"></i>
+                        </div>
+                        <h3 class="fw-extrabold text-dark mb-1">OmniCraft Login</h3>
+                        <p class="text-muted small">Sign in to access your dashboard</p>
+                    </div>
+
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label font-weight-medium">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
+                                <input type="text" name="username" id="id_username" class="form-control border-start-0 bg-light" placeholder="Enter username" required autofocus>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="id_password" class="form-label font-weight-medium">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-key text-muted"></i></span>
+                                <input type="password" name="password" id="id_password" class="form-control border-start-0 bg-light" placeholder="Enter password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 fs-6">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

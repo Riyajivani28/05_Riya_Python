@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OmniCraft Hub - Auth & RBAC Portal{% endblock %}</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange-primary: #f97316;
+            --orange-hover: #ea580c;
+            --orange-dark: #c2410c;
+            --orange-light: #ffedd5;
+            --orange-subtle: #fff7ed;
+            --orange-gradient: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fffaf5;
+            color: #1c1917;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: #ffffff;
+            border-bottom: 2px solid #ffedd5;
+            box-shadow: 0 2px 12px rgba(249, 115, 22, 0.08);
+        }
+        .navbar-brand {
+            font-weight: 800;
+            color: #ea580c !important;
+            letter-spacing: -0.5px;
+        }
+        .nav-link {
+            font-weight: 600;
+            color: #57534e;
+            transition: all 0.2s ease;
+            padding: 8px 14px !important;
+            border-radius: 8px;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #ea580c;
+            background-color: #ffedd5;
+        }
+        .card {
+            border: 1px solid #fed7aa;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.05);
+            background: #ffffff;
+        }
+        .btn-primary {
+            background: var(--orange-gradient);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 9px 20px;
+            box-shadow: 0 3px 8px rgba(234, 88, 12, 0.25);
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+            box-shadow: 0 5px 14px rgba(234, 88, 12, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-outline-primary {
+            color: #f97316;
+            border-color: #f97316;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .btn-outline-primary:hover {
+            background-color: #f97316;
+            border-color: #f97316;
+            color: #ffffff;
+        }
+        .text-primary {
+            color: #ea580c !important;
+        }
+        .bg-primary {
+            background: var(--orange-gradient) !important;
+        }
+        .bg-primary-subtle {
+            background-color: #ffedd5 !important;
+            color: #c2410c !important;
+        }
+        .badge-role {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        .badge-orange {
+            background-color: #ffedd5;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+        .page-header-container {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid #fed7aa;
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.04);
+        }
+        footer {
+            margin-top: auto;
+            background-color: #ffffff;
+            border-top: 1px solid #fed7aa;
+            padding: 24px 0;
+            color: #78716c;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'dashboard' %}">
+                <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                    <i class="bi bi-shop-window fs-5"></i>
+                </div>
+                <div class="d-flex flex-column">
+                    <span class="fs-4 lh-1">OmniCraft Hub</span>
+                    <small class="text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">Zomato • Flipkart • BookMyShow</small>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if user.is_authenticated %}
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3 gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_orders' %}"><i class="bi bi-bag-check me-1"></i>My Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'movie_reviews' %}"><i class="bi bi-film me-1"></i>Movie Reviews</a>
+                        </li>
+                        {% for group in user.groups.all %}
+                            {% if group.name == 'Seller' or user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'post_product' %}"><i class="bi bi-plus-square me-1"></i>Post Product</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-end">
+                            <div class="fw-bold text-dark">{{ user.username }}</div>
+                            <div class="d-flex gap-1 justify-content-end">
+                                {% for group in user.groups.all %}
+                                    <span class="badge badge-orange badge-role">{{ group.name }}</span>
+                                {% empty %}
+                                    {% if user.is_superuser %}
+                                        <span class="badge bg-danger-subtle text-danger badge-role">Superuser</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-subtle text-secondary badge-role">No Role</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                            <i class="bi bi-box-arrow-right me-1"></i>Logout
+                        </a>
+                    </div>
+                {% else %}
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="btn btn-primary btn-sm px-4" href="{% url 'login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                            </a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container my-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show rounded-3 shadow-sm border-0 mb-4" role="alert">
+                    {% if message.tags == 'success' %}
+                        <i class="bi bi-check-circle-fill me-2 text-success"></i>
+                    {% elif message.tags == 'error' or message.tags == 'danger' %}
+                        <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>
+                    {% else %}
+                        <i class="bi bi-info-circle-fill me-2 text-primary"></i>
+                    {% endif %}
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-0 fw-semibold">OmniCraft Hub &copy; 2026 — Django RBAC Multi-Portal Platform</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
