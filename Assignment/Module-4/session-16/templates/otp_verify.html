@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify OTP - AuthVault{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card p-4 p-md-5 border-0 shadow-lg text-center">
+                <div class="mb-4">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 80px; height: 80px; background-color: rgba(212, 175, 55, 0.1);">
+                        <i class="fas fa-shield-check" style="color: var(--primary-gold); font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2">Verify Mobile</h3>
+                    <p class="text-muted">Enter the 6-digit OTP sent to:<br><span class="fw-bold" style="color: var(--text-main);">{{ mobile_number }}</span></p>
+                </div>
+                
+                <form method="POST" id="otpForm">
+                    {% csrf_token %}
+                    
+                    <div class="d-flex justify-content-center gap-2 mb-4">
+                        <input type="text" class="otp-box form-control text-center" maxlength="1" autofocus>
+                        <input type="text" class="otp-box form-control text-center" maxlength="1">
+                        <input type="text" class="otp-box form-control text-center" maxlength="1">
+                        <input type="text" class="otp-box form-control text-center" maxlength="1">
+                        <input type="text" class="otp-box form-control text-center" maxlength="1">
+                        <input type="text" class="otp-box form-control text-center" maxlength="1">
+                    </div>
+                    
+                    <!-- Hidden field to store actual OTP value -->
+                    <input type="hidden" name="otp_code" id="id_otp_code">
+                    
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <div class="text-danger small mb-3">
+                                {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-gold w-100 py-3 mb-4 fw-bold fs-5" id="verifyBtn">Verify OTP</button>
+                </form>
+                
+                <div class="mt-2">
+                    <p class="text-muted mb-2">Didn't receive the code? <span id="timer" style="color: var(--primary-gold);">05:00</span></p>
+                    <form action="{% url 'otp_request' %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="mobile_number" value="{{ mobile_number }}">
+                        <button type="submit" class="btn btn-link p-0 text-decoration-none fw-bold disabled" id="resendBtn" style="color: var(--text-muted);">Resend OTP</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const otpBoxes = document.querySelectorAll('.otp-box');
+        const hiddenInput = document.getElementById('id_otp_code');
+        const otpForm = document.getElementById('otpForm');
+        
+        // Handle OTP input navigation
+        otpBoxes.forEach((box, index) => {
+            box.addEventListener('input', (e) => {
+                if (e.target.value.length === 1) {
+                    if (index < otpBoxes.length - 1) {
+                        otpBoxes[index + 1].focus();
+                    }
+                }
+            });
+            
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value) {
+                    if (index > 0) {
+                        otpBoxes[index - 1].focus();
+                    }
+                }
+            });
+        });
+        
+        // Combine inputs on submit
+        otpForm.addEventListener('submit', function(e) {
+            let code = '';
+            otpBoxes.forEach(box => {
+                code += box.value;
+            });
+            hiddenInput.value = code;
+        });
+
+        // Timer functionality
+        let timeInSecs = 300;
+        const timerElement = document.getElementById('timer');
+        const resendBtn = document.getElementById('resendBtn');
+        
+        const timerInterval = setInterval(() => {
+            timeInSecs--;
+            let m = Math.floor(timeInSecs / 60);
+            let s = timeInSecs % 60;
+            timerElement.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            
+            if (timeInSecs <= 0) {
+                clearInterval(timerInterval);
+                timerElement.textContent = "Expired";
+                resendBtn.classList.remove('disabled');
+                resendBtn.style.color = "var(--primary-gold)";
+            }
+        }, 1000);
+    });
+</script>
+{% endblock %}

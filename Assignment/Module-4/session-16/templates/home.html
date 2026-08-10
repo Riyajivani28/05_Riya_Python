@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - AuthVault{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-6 text-start mb-5 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-4" style="color: var(--text-main);">Secure Login.<br><span style="color: var(--primary-gold);">Smarter Authentication.</span></h1>
+                <p class="lead text-muted mb-5">A modern Django authentication platform with Google OAuth, email verification, and secure OTP-based mobile verification.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-gold btn-lg px-4 py-3"><i class="fas fa-rocket me-2"></i> Get Started</a>
+                    <form action="{% url 'social:begin' 'google-oauth2' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn google-btn btn-lg px-4 py-3">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" width="24" height="24">
+                            Continue with Google
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1">
+                <div class="card p-4 text-start border-0 shadow-lg" style="background: linear-gradient(145deg, #1a1a1a, #111111);">
+                    <h5 class="mb-4 fw-bold" style="color: var(--primary-gold);">Authentication Status</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success fs-5 me-3"></i>
+                        <span class="fs-5">Google Authentication</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success fs-5 me-3"></i>
+                        <span class="fs-5">Email Verification</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-check-circle text-success fs-5 me-3"></i>
+                        <span class="fs-5">Mobile OTP Verification</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-alt text-success fs-5 me-3"></i>
+                        <span class="fs-5">Secure Account</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5" style="background-color: var(--bg-dark);">
+    <div class="container py-5">
+        <h2 class="text-center fw-bold mb-5" style="color: var(--primary-gold);">Platform Features</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card feature-card h-100 p-4 text-center">
+                    <i class="fab fa-google icon-gold"></i>
+                    <h5 class="fw-bold mb-3">Google OAuth</h5>
+                    <p class="text-muted small">Sign in securely using your Google account without remembering another password.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card feature-card h-100 p-4 text-center">
+                    <i class="fas fa-envelope-open-text icon-gold"></i>
+                    <h5 class="fw-bold mb-3">Email Verification</h5>
+                    <p class="text-muted small">Receive a customized welcome email via Mailgun API upon successful registration.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card feature-card h-100 p-4 text-center">
+                    <i class="fas fa-mobile-alt icon-gold"></i>
+                    <h5 class="fw-bold mb-3">Mobile OTP</h5>
+                    <p class="text-muted small">Verify your mobile number using a 6-digit OTP delivered securely through Twilio.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card feature-card h-100 p-4 text-center">
+                    <i class="fas fa-lock icon-gold"></i>
+                    <h5 class="fw-bold mb-3">Secure Auth</h5>
+                    <p class="text-muted small">Protected Django authentication and session management ensuring top-tier security.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5" style="background-color: var(--bg-secondary);">
+    <div class="container py-5">
+        <h2 class="text-center fw-bold mb-5" style="color: var(--primary-gold);">How It Works</h2>
+        <div class="row position-relative">
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+                <div class="d-inline-flex justify-content-center align-items-center rounded-circle border border-2 mb-3" style="width: 60px; height: 60px; border-color: var(--primary-gold) !important; color: var(--primary-gold); font-size: 1.5rem; font-weight: bold;">
+                    01
+                </div>
+                <h5 class="fw-bold">Create Account</h5>
+                <p class="text-muted small">Register using username, email and password.</p>
+            </div>
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+                <div class="d-inline-flex justify-content-center align-items-center rounded-circle border border-2 mb-3" style="width: 60px; height: 60px; border-color: var(--primary-gold) !important; color: var(--primary-gold); font-size: 1.5rem; font-weight: bold;">
+                    02
+                </div>
+                <h5 class="fw-bold">Login</h5>
+                <p class="text-muted small">Login normally or continue with Google.</p>
+            </div>
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+                <div class="d-inline-flex justify-content-center align-items-center rounded-circle border border-2 mb-3" style="width: 60px; height: 60px; border-color: var(--primary-gold) !important; color: var(--primary-gold); font-size: 1.5rem; font-weight: bold;">
+                    03
+                </div>
+                <h5 class="fw-bold">Verify</h5>
+                <p class="text-muted small">Verify your mobile number using OTP.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="d-inline-flex justify-content-center align-items-center rounded-circle border border-2 mb-3" style="width: 60px; height: 60px; border-color: var(--primary-gold) !important; color: var(--primary-gold); font-size: 1.5rem; font-weight: bold;">
+                    04
+                </div>
+                <h5 class="fw-bold">Access Dashboard</h5>
+                <p class="text-muted small">View your account and authentication status.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Security Section -->
+<section class="py-5" style="background-color: var(--bg-dark);">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h2 class="fw-bold mb-4">Built With <span style="color: var(--primary-gold);">Security in Mind</span></h2>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">OAuth 2.0 Authentication</span></li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">Django Authentication</span></li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">Secure Sessions</span></li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">OTP Expiration</span></li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">Login Protection</span></li>
+                    <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">Environment Variables</span></li>
+                    <li class="mb-0 d-flex align-items-center"><i class="fas fa-check-circle text-success me-3 fs-5"></i> <span class="fs-5">API Credential Protection</span></li>
+                </ul>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="position-relative d-inline-block">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%); border-radius: 50%;"></div>
+                    <i class="fas fa-shield-alt" style="font-size: 15rem; color: #171717; text-shadow: 0 0 30px rgba(212,175,55,0.5);"></i>
+                    <i class="fas fa-lock position-absolute" style="top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 5rem; color: var(--primary-gold);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

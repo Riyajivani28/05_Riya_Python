@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Request OTP - AuthVault{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-5">
+            <div class="card p-4 p-md-5 border-0 shadow-lg text-center">
+                <div class="mb-4">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 80px; height: 80px; background-color: rgba(212, 175, 55, 0.1);">
+                        <i class="fas fa-mobile-alt" style="color: var(--primary-gold); font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2">Verify Your Mobile</h3>
+                    <p class="text-muted">Enter your mobile number to receive a secure one-time password.</p>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-4 text-start">
+                            <label for="{{ field.id_for_label }}" class="form-label small text-uppercase text-muted fw-bold">Mobile Number</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <button type="submit" class="btn btn-gold w-100 py-3 fw-bold fs-5">Send OTP</button>
+                </form>
+                
+                <div class="text-center mt-4">
+                    <a href="{% url 'dashboard' %}" class="text-decoration-none" style="color: var(--text-muted);"><i class="fas fa-arrow-left me-1"></i> Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+:root {
+    --bg-dark: #080808;
+    --bg-secondary: #111111;
+    --card-dark: #171717;
+    --primary-gold: #D4AF37;
+    --light-gold: #F5D76E;
+    --text-main: #FFFFFF;
+    --text-muted: #AFAFAF;
+    --border-color: #292929;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: rgba(17, 17, 17, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    color: var(--text-main) !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+.navbar-brand span {
+    color: var(--primary-gold);
+}
+
+.nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-gold) !important;
+}
+
+.card {
+    background-color: var(--card-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-gold);
+}
+
+.btn-gold {
+    background-color: var(--primary-gold);
+    color: #000000;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: var(--light-gold);
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-outline-gold {
+    background-color: transparent;
+    color: var(--primary-gold);
+    border: 1px solid var(--primary-gold);
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-gold:hover {
+    background-color: var(--primary-gold);
+    color: #000000;
+    transform: translateY(-2px);
+}
+
+.form-control, .form-control:focus {
+    background-color: var(--bg-secondary);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+.form-control:focus {
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.google-btn {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+    background-color: #f1f1f1;
+    color: #000000;
+    transform: translateY(-2px);
+}
+
+main {
+    flex: 1;
+}
+
+.hero-section {
+    padding: 6rem 0;
+    background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent 40%);
+}
+
+.icon-gold {
+    color: var(--primary-gold);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.otp-box {
+    width: 3rem;
+    height: 4rem;
+    font-size: 1.5rem;
+    text-align: center;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 8px;
+}
+.otp-box:focus {
+    border-color: var(--primary-gold);
+    outline: none;
+}
+.split-screen-left {
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-secondary) 100%);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+}
+.footer {
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 3rem 0;
+    margin-top: auto;
+}
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.footer-link:hover {
+    color: var(--primary-gold);
+}
+
