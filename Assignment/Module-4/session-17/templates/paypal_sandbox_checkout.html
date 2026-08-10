@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}PayPal Sandbox Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="custom-card p-4 p-md-5 border-0 shadow" style="border-top: 4px solid #003087 !important;">
+                
+                <div class="mb-4">
+                    <i class="fa-brands fa-paypal text-primary" style="font-size: 3.5rem; color: #003087 !important;"></i>
+                    <h3 class="fw-bold mt-2 text-dark">PayPal Sandbox Approval Portal</h3>
+                    <span class="badge bg-warning-subtle text-warning fw-bold px-3 py-1">Sandbox Environment</span>
+                </div>
+
+                <div class="card bg-light p-3 mb-4 text-start border">
+                    <h6 class="fw-bold text-secondary mb-2 border-bottom pb-2">Order Confirmation</h6>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Order ID:</span>
+                        <span class="fw-bold font-monospace">{{ order.order_id }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Customer:</span>
+                        <span class="fw-bold">{{ order.customer_name }} ({{ order.email }})</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Item:</span>
+                        <span class="fw-bold">{{ order.item_name }} (x{{ order.quantity }})</span>
+                    </div>
+                    <div class="d-flex justify-content-between pt-2 border-top">
+                        <span class="text-muted">Total Amount:</span>
+                        <span class="fw-bold fs-5 text-primary">₹{{ "%.2f"|format(order.amount) }}</span>
+                    </div>
+                </div>
+
+                <p class="small text-muted mb-4">
+                    This simulates PayPal Sandbox User Approval. You can complete or cancel the mock payment transaction below.
+                </p>
+
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('paypal_success', order_id=order.order_id, token='PAYPAL-SANDBOX-' ~ order.order_id) }}" class="btn btn-warning py-3 fw-bold fs-5 text-dark shadow-sm">
+                        <i class="fa-solid fa-check me-2"></i> Approve & Complete Payment
+                    </a>
+                    
+                    <a href="{{ url_for('paypal_cancel', order_id=order.order_id) }}" class="btn btn-outline-danger py-2 fw-semibold">
+                        <i class="fa-solid fa-xmark me-2"></i> Cancel Payment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

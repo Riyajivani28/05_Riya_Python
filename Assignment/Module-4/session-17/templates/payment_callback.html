@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}PayEase - Paytm Redirect{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="custom-card p-5 shadow-sm">
+                <div class="spinner-border text-primary mb-4" style="width: 3.5rem; height: 3.5rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+
+                <h3 class="fw-bold mb-2">Redirecting to Paytm Sandbox Gateway</h3>
+                <p class="text-muted mb-4">Please do not close this browser window or press refresh.</p>
+
+                <div class="card bg-light p-3 mb-4 text-start border-0">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Order ID:</span>
+                        <span class="fw-bold">{{ order.order_id }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Customer:</span>
+                        <span class="fw-bold">{{ order.customer_name }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Total Amount:</span>
+                        <span class="fw-bold text-success">₹{{ "%.2f"|format(order.amount) }}</span>
+                    </div>
+                </div>
+
+                <!-- Paytm Gateway Auto-Submit Form -->
+                <form method="POST" action="{{ paytm_url }}" name="paytm_form" id="paytm_form">
+                    {% for key, value in paytm_params.items() %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2 mb-3">
+                        Click here if not redirected automatically
+                    </button>
+                </form>
+
+                <!-- Sandbox Test Simulator Fallback Option -->
+                <div class="border-top pt-4 mt-3">
+                    <p class="small text-muted mb-2"><strong>Sandbox Quick Test Actions:</strong></p>
+                    <div class="d-flex gap-2">
+                        <form action="{{ url_for('payment_callback') }}" method="POST" class="flex-grow-1">
+                            <input type="hidden" name="sim_order_id" value="{{ order.order_id }}">
+                            <input type="hidden" name="sim_status" value="TXN_SUCCESS">
+                            <button type="submit" class="btn btn-success btn-sm w-100 fw-bold">
+                                <i class="fa-solid fa-check-circle me-1"></i> Simulate Paytm Success
+                            </button>
+                        </form>
+
+                        <form action="{{ url_for('payment_callback') }}" method="POST" class="flex-grow-1">
+                            <input type="hidden" name="sim_order_id" value="{{ order.order_id }}">
+                            <input type="hidden" name="sim_status" value="TXN_FAILURE">
+                            <button type="submit" class="btn btn-outline-danger btn-sm w-100 fw-bold">
+                                <i class="fa-solid fa-times-circle me-1"></i> Simulate Paytm Failure
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Auto-submit Paytm form after brief delay
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            // Document form submit
+            // document.forms['paytm_form'].submit();
+        }, 1500);
+    });
+</script>
+{% endblock %}

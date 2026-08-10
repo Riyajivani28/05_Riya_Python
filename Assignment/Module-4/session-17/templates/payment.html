@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}PayEase - Food Checkout{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="mb-3">
+                <a href="{{ url_for('food_order') }}" class="text-decoration-none text-muted">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Back to Food Menu
+                </a>
+            </div>
+
+            <div class="custom-card p-4 p-md-5">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                    <div>
+                        <h3 class="fw-bold mb-1">Food Order Checkout</h3>
+                        <p class="text-muted small mb-0">Powered by Stripe Test Mode</p>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary fw-bold px-3 py-2">
+                        <i class="fa-brands fa-stripe me-1"></i> Stripe Sandbox
+                    </span>
+                </div>
+
+                <!-- Food Dish Summary Box -->
+                <div class="card bg-light border-0 mb-4 p-3 rounded-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{{ food.image_url }}" alt="{{ food.dish_name }}" class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
+                        <div class="flex-grow-1">
+                            <span class="badge bg-secondary mb-1">{{ food.restaurant_name }}</span>
+                            <h5 class="fw-bold mb-1 text-dark">{{ food.dish_name }}</h5>
+                            <p class="small text-muted mb-0">{{ food.description }}</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="small text-muted d-block">Price / Dish</span>
+                            <span class="fw-bold fs-5 text-danger" id="unitPrice" data-price="{{ food.price }}">₹{{ "%.2f"|format(food.price) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkout Form -->
+                <form action="{{ url_for('payment') }}" method="POST" class="needs-validation" novalidate>
+                    <input type="hidden" name="food_id" value="{{ food.id }}">
+
+                    <div class="mb-3">
+                        <label for="customer_name" class="form-label fw-semibold">Customer Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg fs-6" id="customer_name" name="customer_name" placeholder="e.g. Priya Patel" required>
+                        <div class="invalid-feedback">Please enter your name.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control form-control-lg fs-6" id="email" name="email" placeholder="e.g. priya@example.com" required>
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="quantity" class="form-label fw-semibold">Quantity <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control form-control-lg fs-6" id="quantity" name="quantity" min="1" max="20" value="1" required>
+                            <div class="invalid-feedback">Please enter a valid quantity (1-20).</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Total Dynamic Amount</label>
+                            <div class="p-2 border rounded bg-white text-center">
+                                <span class="fs-4 fw-bold text-danger" id="totalAmount">₹{{ "%.2f"|format(food.price) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info border-0 shadow-sm d-flex align-items-center gap-3 mb-4">
+                        <i class="fa-solid fa-shield-halved fs-3 text-primary"></i>
+                        <div class="small">
+                            <strong>Stripe Test Payment Integration:</strong>
+                            <br>No real money will be charged. Use Stripe test card credentials (4242 4242...).
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100 py-3 fs-5 fw-bold shadow-sm">
+                        <i class="fa-brands fa-stripe me-2"></i> Pay with Stripe Checkout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

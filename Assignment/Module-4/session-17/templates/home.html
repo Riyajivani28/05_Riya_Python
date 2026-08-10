@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}PayEase - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <span class="sandbox-badge mb-3">
+            <i class="fa-solid fa-vial"></i> SANDBOX / TEST MODE ACTIVE
+        </span>
+        <h1 class="hero-title mt-2">Simple & Secure Test Payments</h1>
+        <p class="hero-subtext">
+            Book IPL tickets or order your favourite food using sandbox payment gateways like Paytm, Stripe, and PayPal.
+        </p>
+    </div>
+</section>
+
+<!-- Main Features Cards -->
+<section class="container py-5">
+    <div class="row g-4 justify-content-center">
+        <!-- IPL Ticket Booking Card -->
+        <div class="col-md-6 col-lg-5">
+            <div class="custom-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="bg-primary text-white rounded-3 p-3 d-inline-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                            <i class="fa-solid fa-ticket fs-3"></i>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2 rounded-pill">
+                            Paytm & PayPal
+                        </span>
+                    </div>
+                    <h3 class="fw-bold mb-2">IPL Ticket Booking</h3>
+                    <p class="text-muted">
+                        Select match, pick ticket quantity, and complete sandbox payment seamlessly using Paytm Sandbox or PayPal Sandbox.
+                    </p>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <a href="{{ url_for('tickets') }}" class="btn btn-outline-custom flex-grow-1">View Tickets</a>
+                    <a href="{{ url_for('tickets') }}" class="btn btn-primary-custom flex-grow-1 text-center">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Ordering Card -->
+        <div class="col-md-6 col-lg-5">
+            <div class="custom-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="bg-danger text-white rounded-3 p-3 d-inline-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                            <i class="fa-solid fa-utensils fs-3"></i>
+                        </div>
+                        <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-2 rounded-pill">
+                            Stripe Test
+                        </span>
+                    </div>
+                    <h3 class="fw-bold mb-2">Zomato-Style Food Order</h3>
+                    <p class="text-muted">
+                        Browse delicious dishes, customize your meal quantity, and pay securely using Stripe Checkout Test Mode.
+                    </p>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <a href="{{ url_for('food_order') }}" class="btn btn-outline-custom flex-grow-1">Order Food</a>
+                    <a href="{{ url_for('food_order') }}" class="btn btn-primary-custom flex-grow-1 text-center">Pay Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Gateways Grid Info -->
+    <div class="row mt-5 pt-3">
+        <div class="col-12 text-center mb-4">
+            <h4 class="fw-bold">Integrated Sandbox Payment Gateways</h4>
+            <p class="text-muted small">Experience end-to-end sandbox payment callbacks & instant status verification</p>
+        </div>
+        <div class="col-md-4 text-center mb-3">
+            <div class="p-3 border rounded-3 bg-white shadow-sm h-100">
+                <i class="fa-solid fa-building-columns text-primary fs-2 mb-2"></i>
+                <h6 class="fw-bold mb-1">Paytm Sandbox</h6>
+                <p class="text-muted small mb-0">Checksum signature verification & callback status processing</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-3">
+            <div class="p-3 border rounded-3 bg-white shadow-sm h-100">
+                <i class="fa-brands fa-stripe text-indigo fs-2 mb-2" style="color: #635bff;"></i>
+                <h6 class="fw-bold mb-1">Stripe Test Mode</h6>
+                <p class="text-muted small mb-0">Hosted Stripe checkout sessions & webhook verification</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-3">
+            <div class="p-3 border rounded-3 bg-white shadow-sm h-100">
+                <i class="fa-brands fa-paypal text-primary fs-2 mb-2" style="color: #003087;"></i>
+                <h6 class="fw-bold mb-1">PayPal Sandbox</h6>
+                <p class="text-muted small mb-0">OAuth token authentication & payment capture flow</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

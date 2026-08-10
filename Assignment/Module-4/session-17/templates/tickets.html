@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}PayEase - IPL Ticket Booking{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold mb-1">IPL 2026 Match Tickets</h2>
+            <p class="text-muted mb-0">Select an upcoming match to book tickets using Paytm Sandbox or PayPal Sandbox.</p>
+        </div>
+        <span class="sandbox-badge d-none d-md-inline-block">
+            <i class="fa-solid fa-ticket-simple"></i> Sandbox Booking
+        </span>
+    </div>
+
+    <div class="row g-4">
+        {% for match in matches %}
+        <div class="col-md-6 col-lg-6">
+            <div class="custom-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="card-img-wrapper">
+                        <img src="{{ match.image_url }}" alt="{{ match.team_a }} vs {{ match.team_b }}" loading="lazy">
+                        <span class="position-absolute top-0 end-0 m-3 badge bg-dark opacity-75 fs-6 fw-normal px-3 py-2 rounded-pill">
+                            IPL 2026
+                        </span>
+                    </div>
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h4 class="fw-bold mb-0 text-dark">{{ match.team_a }} <span class="text-primary fs-5">VS</span> {{ match.team_b }}</h4>
+                        </div>
+                        
+                        <p class="text-muted mb-2">
+                            <i class="fa-solid fa-location-dot text-danger me-2"></i> {{ match.venue }}
+                        </p>
+                        
+                        <p class="text-muted mb-3">
+                            <i class="fa-solid fa-calendar-days text-primary me-2"></i> {{ match.match_date }}
+                        </p>
+
+                        <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3 mb-2 border">
+                            <div>
+                                <span class="text-muted d-block small">Ticket Price</span>
+                                <span class="price-tag">₹{{ "%.2f"|format(match.price) }}</span>
+                            </div>
+                            <div class="text-end">
+                                <span class="text-muted d-block small">Availability</span>
+                                {% if match.available_tickets > 0 %}
+                                    <span class="badge bg-success-subtle text-success fw-bold px-3 py-2 rounded-pill">
+                                        {{ match.available_tickets }} Left
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-danger-subtle text-danger fw-bold px-3 py-2 rounded-pill">
+                                        Sold Out
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 pt-0">
+                    {% if match.available_tickets > 0 %}
+                        <a href="{{ url_for('pay', match_id=match.id) }}" class="btn btn-primary-custom w-100 py-2 fs-6">
+                            <i class="fa-solid fa-ticket me-2"></i> Book Tickets Now
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary w-100 py-2 fs-6" disabled>
+                            Sold Out
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted fs-5">No matches found in database.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
