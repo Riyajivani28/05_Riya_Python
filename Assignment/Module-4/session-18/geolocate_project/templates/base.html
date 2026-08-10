@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GeoLocate Hub - Dynamic Google Maps Geocoding, Nearby Cafes & Pickup Point Finder">
+    <title>{% block title %}GeoLocate Hub{% endblock %}</title>
+
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Leaflet.js CSS (Free OpenStreetMap Fallback Engine) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-geo-alt-fill"></i> GeoLocate Hub
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-1">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+                            <i class="bi bi-house-door me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'live_map' %}active{% endif %}" href="{% url 'live_map' %}">
+                            <i class="bi bi-search me-1"></i> Live Map Search
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'geocode' %}active{% endif %}" href="{% url 'geocode' %}">
+                            <i class="bi bi-compass me-1"></i> Geocode
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'restaurant_location' %}active{% endif %}" href="{% url 'restaurant_location' %}">
+                            <i class="bi bi-shop me-1"></i> Restaurant Map
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'nearby_cafes' %}active{% endif %}" href="{% url 'nearby_cafes' %}">
+                            <i class="bi bi-cup-hot me-1"></i> Nearby Cafes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'pickup_search' %}active{% endif %}" href="{% url 'pickup_search' %}">
+                            <i class="bi bi-pin-map me-1"></i> Pickup Points
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="py-4">
+        <div class="container">
+            <!-- Messages / Alerts -->
+            {% if messages %}
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm mb-3" role="alert">
+                                {% if message.tags == 'error' %}
+                                    <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                                {% elif message.tags == 'success' %}
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                {% elif message.tags == 'warning' %}
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-1"><strong>GeoLocate Hub</strong> &copy; 2026 — Dynamic Location Finder & Geocoding Suite</p>
+            <p class="mb-0 text-muted" style="font-size: 0.85rem;">Powered by Django, Google Maps API, Leaflet OpenStreetMap & Manual Haversine Algorithm</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet.js (Free OpenStreetMap Fallback Engine) -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Custom Application Script -->
+    <script src="{% static 'css/../js/script.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

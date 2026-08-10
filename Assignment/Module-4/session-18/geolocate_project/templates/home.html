@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}GeoLocate Hub - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <span class="badge bg-primary px-3 py-2 rounded-pill mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                <i class="bi bi-geo-fill me-1"></i> REAL-TIME LOCATION INTELLIGENCE
+            </span>
+            <h1 class="hero-title">Find Any Location Easily</h1>
+            <p class="hero-subtitle">
+                Convert addresses into precise coordinates, view dynamic locations on live Google Maps, calculate exact distances with custom Haversine algorithm, and discover nearby places effortlessly.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'live_map' %}" class="btn btn-primary-custom btn-lg px-4 py-2">
+                    <i class="bi bi-search me-1"></i> Try Live Map Search
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Cards -->
+<div class="row g-4 mb-5">
+    <!-- Card 1: Live Map Search -->
+    <div class="col-md-6 col-lg-4">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-search"></i>
+            </div>
+            <h3 class="feature-title">Live Map Search</h3>
+            <p class="feature-desc">
+                Search any location, restaurant, city, or landmark to center a live Google Map dynamically with location pin details.
+            </p>
+            <a href="{% url 'live_map' %}" class="btn btn-outline-primary w-100 mt-auto rounded-3 font-semibold">
+                Live Map Search <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Card 2: Address Geocoder -->
+    <div class="col-md-6 col-lg-4">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-compass"></i>
+            </div>
+            <h3 class="feature-title">Address Geocoder</h3>
+            <p class="feature-desc">
+                Convert any human-readable address into exact latitude and longitude coordinates using Google Geocoding API.
+            </p>
+            <a href="{% url 'geocode' %}" class="btn btn-outline-primary w-100 mt-auto rounded-3 font-semibold">
+                Open Geocoder <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Card 3: Restaurant Location -->
+    <div class="col-md-6 col-lg-4">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-shop"></i>
+            </div>
+            <h3 class="feature-title">Restaurant Location</h3>
+            <p class="feature-desc">
+                Enter a restaurant name and address to view its exact location with dynamic markers on interactive Google Maps.
+            </p>
+            <a href="{% url 'restaurant_location' %}" class="btn btn-outline-primary w-100 mt-auto rounded-3 font-semibold">
+                View Restaurant Map <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Card 4: Nearby Cafes -->
+    <div class="col-md-6 col-lg-6">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-cup-hot"></i>
+            </div>
+            <h3 class="feature-title">Nearby Cafes</h3>
+            <p class="feature-desc">
+                Find cafes within a 3 km radius of your location calculated using a pure mathematical Haversine formula.
+            </p>
+            <a href="{% url 'nearby_cafes' %}" class="btn btn-outline-primary w-100 mt-auto rounded-3 font-semibold">
+                Discover Cafes <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Card 5: Pickup Point Finder -->
+    <div class="col-md-6 col-lg-6">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-pin-map"></i>
+            </div>
+            <h3 class="feature-title">Pickup Point Finder</h3>
+            <p class="feature-desc">
+                Find and rank package pickup points nearest to your address with highlighted top recommendations.
+            </p>
+            <a href="{% url 'pickup_search' %}" class="btn btn-outline-primary w-100 mt-auto rounded-3 font-semibold">
+                Find Pickup Points <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

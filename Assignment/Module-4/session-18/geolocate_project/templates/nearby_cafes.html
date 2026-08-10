@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nearby Cafes - GeoLocate Hub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold"><i class="bi bi-cup-hot text-primary me-2"></i>Nearby Cafe Finder (within 3 km)</h2>
+            <p class="text-muted">Enter your location to discover cafes within 3 km, filtered and sorted using a manual Python Haversine formula.</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-container-card mb-4">
+            <form method="POST" action="{% url 'nearby_cafes' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_address" class="form-label fw-semibold">Your Current Address / Location</label>
+                    {{ form.address }}
+                    <div class="form-text">e.g. "IIM Ahmedabad, Gujarat" or "Kalawad Road, Rajkot"</div>
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6">
+                    <i class="bi bi-geo-alt-fill me-1"></i> Find Nearby Cafes
+                </button>
+            </form>
+        </div>
+
+        <!-- User Location & Map Results Section -->
+        {% if user_location %}
+            {{ user_location|json_script:"user-location-data" }}
+            {{ cafes|json_script:"cafes-data" }}
+
+            <div class="card border-0 shadow-md rounded-3 mb-4">
+                <div class="card-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-semibold"><i class="bi bi-person-pin me-2 text-info"></i>Your Location & Map Overview</h5>
+                    <span class="badge bg-primary px-3 py-1">Haversine Filter (&le; 3 km)</span>
+                </div>
+                <div class="card-body p-4 bg-white">
+                    <div class="row mb-3">
+                        <div class="col-md-7">
+                            <p class="mb-1 text-muted"><strong>Searched Address:</strong> {{ user_location.address }}</p>
+                            <p class="mb-0 text-muted"><strong>Formatted Location:</strong> {{ user_location.formatted_address }}</p>
+                        </div>
+                        <div class="col-md-5 text-md-end">
+                            <span class="badge bg-light text-dark border p-2 me-1">
+                                <strong>Lat:</strong> {{ user_location.lat }}
+                            </span>
+                            <span class="badge bg-light text-dark border p-2">
+                                <strong>Lng:</strong> {{ user_location.lng }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Google Map / OpenStreetMap Container -->
+                    <div id="cafeMap" class="map-container"></div>
+                </div>
+            </div>
+
+            <!-- List of Nearby Cafes -->
+            <div class="mb-4">
+                <h4 class="fw-bold mb-3 d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-stars me-2 text-primary"></i>Nearby Cafes Result</span>
+                    {% if cafes %}
+                        <span class="badge bg-success fs-6 fw-normal">{{ cafes|length }} Cafe(s) Found</span>
+                    {% endif %}
+                </h4>
+
+                {% if cafes %}
+                    <div class="row g-3">
+                        {% for cafe in cafes %}
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card h-100 border shadow-sm rounded-3">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="badge bg-primary rounded-circle" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">
+                                                {{ forloop.counter }}
+                                            </span>
+                                            <span class="result-badge">
+                                                <i class="bi bi-lightning-charge-fill me-1"></i>{{ cafe.distance }} km away
+                                            </span>
+                                        </div>
+                                        <h5 class="card-title fw-bold text-dark mb-1">{{ cafe.name }}</h5>
+                                        <p class="card-text text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i>{{ cafe.address }}</p>
+                                        <div class="text-muted" style="font-size: 0.8rem;">
+                                            <span class="me-2"><strong>City:</strong> {{ cafe.city }}</span>
+                                            <span><strong>Coords:</strong> {{ cafe.lat }}, {{ cafe.lng }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning text-center p-4 shadow-sm rounded-3">
+                        <i class="bi bi-emoji-frown fs-2 d-block mb-2 text-warning"></i>
+                        <h5 class="fw-bold">No cafes were found within 3 km.</h5>
+                        <p class="mb-0">Try searching near major hub locations such as "IIM Ahmedabad, Gujarat" or "Kalawad Road, Rajkot".</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if user_location %}
+    {% if google_maps_api_key and google_maps_api_key != 'your_google_maps_api_key' %}
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=loadCafeMap" async defer></script>
+    {% endif %}
+    <script>
+        function loadCafeMap() {
+            const uElement = document.getElementById('user-location-data');
+            const cElement = document.getElementById('cafes-data');
+            if (!uElement) return;
+
+            const uData = JSON.parse(uElement.textContent);
+            const cData = cElement ? JSON.parse(cElement.textContent) : [];
+
+            initCafeMap(
+                parseFloat(uData.lat), 
+                parseFloat(uData.lng), 
+                uData.formatted_address, 
+                cData
+            );
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            loadCafeMap();
+        });
+    </script>
+{% endif %}
+{% endblock %}

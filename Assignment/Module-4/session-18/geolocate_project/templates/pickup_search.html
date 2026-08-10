@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Pickup Point Search - GeoLocate Hub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold"><i class="bi bi-pin-map text-primary me-2"></i>Pickup Point Finder</h2>
+            <p class="text-muted">Enter your address to locate nearest package drop-off & pickup points, ranked by exact Haversine distance.</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-container-card mb-4">
+            <form method="POST" action="{% url 'pickup_search' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_address" class="form-label fw-semibold">Enter Your Current Address</label>
+                    {{ form.address }}
+                    <div class="form-text">Try searching "Rajkot, Gujarat" or "Ashram Road, Ahmedabad".</div>
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6">
+                    <i class="bi bi-search me-1"></i> Search Nearest Pickup Points
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

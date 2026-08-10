@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Address Geocoder - GeoLocate Hub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold"><i class="bi bi-compass text-primary me-2"></i>Address Geocoder</h2>
+            <p class="text-muted">Enter any address below to convert it into accurate geographical coordinates (Latitude & Longitude) using Google Geocoding API.</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-container-card mb-4">
+            <form method="POST" action="{% url 'geocode' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_address" class="form-label fw-semibold">Address / Location Name</label>
+                    {{ form.address }}
+                    <div class="form-text">Try examples like "IIM Ahmedabad, Gujarat" or "Kalawad Road, Rajkot".</div>
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6">
+                    <i class="bi bi-search me-1"></i> Get Coordinates & View Map
+                </button>
+            </form>
+        </div>
+
+        <!-- Results & Live Map Card -->
+        {% if result %}
+            {{ result|json_script:"live-map-data" }}
+
+            <div class="card border-0 shadow-md rounded-3 overflow-hidden mb-4">
+                <div class="card-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-semibold"><i class="bi bi-geo-alt-fill text-info me-2"></i>Geocoding & Dynamic Map Results</h5>
+                    <span class="badge bg-success px-3 py-1">API Verified</span>
+                </div>
+                <div class="card-body p-4 bg-white">
+                    <!-- Interactive Google Map / OpenStreetMap Container -->
+                    <div id="liveMap" class="map-container mb-4"></div>
+
+                    <!-- Location Details -->
+                    <div class="mb-3">
+                        <small class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Searched Address</small>
+                        <div class="fs-5 fw-medium text-dark">{{ result.searched_address }}</div>
+                    </div>
+
+                    <hr class="text-muted my-3"/>
+
+                    <div class="mb-3">
+                        <small class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Google Formatted Address</small>
+                        <div class="fs-6 fw-normal text-secondary"><i class="bi bi-map me-1 text-primary"></i> {{ result.formatted_address }}</div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border text-center">
+                                <small class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Latitude</small>
+                                <div class="fs-4 fw-bold text-primary">{{ result.lat }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border text-center">
+                                <small class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem;">Longitude</small>
+                                <div class="fs-4 fw-bold text-primary">{{ result.lng }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if result %}
+    {% if google_maps_api_key and google_maps_api_key != 'your_google_maps_api_key' %}
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=loadLiveMap" async defer></script>
+    {% endif %}
+    <script>
+        function loadLiveMap() {
+            const dataElement = document.getElementById('live-map-data');
+            if (!dataElement) return;
+            const liveData = JSON.parse(dataElement.textContent);
+            initLiveMap(
+                parseFloat(liveData.lat),
+                parseFloat(liveData.lng),
+                liveData.query,
+                liveData.formatted_address
+            );
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            loadLiveMap();
+        });
+    </script>
+{% endif %}
+{% endblock %}
