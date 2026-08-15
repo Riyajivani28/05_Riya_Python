@@ -10,5 +10,6 @@ d=input("enter the duration :")
 
 s=song(t,a,d)
 s1=song()
+s2=song()
 
     

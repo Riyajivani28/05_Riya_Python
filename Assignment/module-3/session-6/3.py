@@ -1,9 +1,4 @@
 
-'''Demonstrate multilevel inheritance by creating a class 
-VerifiedInfluencer that inherits from Influencer and
-adds a badge attribute; create a VerifiedInfluencer object and 
-display all its properties.'''
-
 class user:
     pass
 
