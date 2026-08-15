@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>User Profiles</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(
+                135deg,
+                #e0f2fe,
+                #f8fafc
+            );
+
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* Header */
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.08);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #1e3a8a;
+            font-size: 30px;
+        }
+
+        .header p {
+            color: #64748b;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Add Button */
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* Export Button */
+
+        .export-btn {
+            background: #16a34a;
+            color: white;
+
+            text-decoration: none;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        /* Profiles Grid */
+
+        .profiles {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(260px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        /* Profile Card */
+
+        .profile-card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.08);
+
+            transition: 0.3s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0, 0, 0, 0.12);
+        }
+
+        /* Avatar */
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+
+            border-radius: 50%;
+
+            background: #dbeafe;
+            color: #1d4ed8;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 24px;
+            font-weight: bold;
+
+            margin-bottom: 18px;
+        }
+
+        /* Username */
+
+        .username {
+            color: #1e293b;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        /* Age */
+
+        .age {
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 15px;
+        }
+
+        /* Visibility */
+
+        .visibility {
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .public {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .private {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* Edit Button */
+
+        .edit-btn {
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 9px 15px;
+
+            background: #2563eb;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .edit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Empty */
+
+        .empty {
+            background: white;
+
+            padding: 50px;
+
+            border-radius: 15px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.08);
+        }
+
+        .empty h2 {
+            color: #334155;
+
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            margin-bottom: 20px;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            .header {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 20px;
+            }
+
+            .header-buttons {
+                width: 100%;
+
+                flex-direction: column;
+            }
+
+            .add-btn,
+            .export-btn {
+                width: 100%;
+
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .profiles {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+
+        <!-- Header -->
+
+        <div class="header">
+
+            <div>
+
+                <h1>
+                    User Profiles
+                </h1>
+
+                <p>
+                    Manage all social media profiles
+                </p>
+
+            </div>
+
+
+            <div class="header-buttons">
+
+                <!-- Export CSV -->
+
+                <a
+                    href="{% url 'export_profiles' %}"
+                    class="export-btn"
+                >
+                    ↓ Export CSV
+                </a>
+
+
+                <!-- Add Profile -->
+
+                <a
+                    href="{% url 'create_profile' %}"
+                    class="add-btn"
+                >
+                    + Add New Profile
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Profiles -->
+
+        {% if profiles %}
+
+            <div class="profiles">
+
+
+                {% for profile in profiles %}
+
+
+                    <!-- Profile Card -->
+
+                    <div class="profile-card">
+
+
+                        <!-- Avatar -->
+
+                        <div class="avatar">
+
+                            {{ profile.username|first|upper }}
+
+                        </div>
+
+
+                        <!-- Username -->
+
+                        <div class="username">
+
+                            {{ profile.username }}
+
+                        </div>
+
+
+                        <!-- Age -->
+
+                        <div class="age">
+
+                            Age: {{ profile.age }}
+
+                        </div>
+
+
+                        <!-- Public / Private -->
+
+                        {% if profile.is_public %}
+
+                            <span
+                                class="visibility public"
+                            >
+                                Public Account
+                            </span>
+
+                        {% else %}
+
+                            <span
+                                class="visibility private"
+                            >
+                                Private Account
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- Edit Button -->
+
+                        <br>
+
+                        <a
+                            href="{% url 'edit_profile' profile.pk %}"
+                            class="edit-btn"
+                        >
+                            Edit Profile
+                        </a>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- No Profiles -->
+
+            <div class="empty">
+
+                <h2>
+                    No Profiles Found
+                </h2>
+
+                <p>
+                    There are no user profiles available yet.
+                </p>
+
+                <a
+                    href="{% url 'create_profile' %}"
+                    class="add-btn"
+                >
+                    Create First Profile
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</body>
+
+</html>
