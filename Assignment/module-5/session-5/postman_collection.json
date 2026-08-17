@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "c6794b49-afb8-4e38-bc6d-9ce719f1f03c",
+		"name": "Django DRF External APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Music Weather API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test('Response contains temperature and description', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('temperature');",
+							"    pm.expect(jsonData).to.have.property('description');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/music-weather/London/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"music-weather",
+						"London",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Food Location API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/food-location/?restaurant=Dominos",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"food-location",
+						""
+					],
+					"query": [
+						{
+							"key": "restaurant",
+							"value": "Dominos"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Country Info API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/country-info/India/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"country-info",
+						"India",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. GitHub Repos API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/github-repos/octocat/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"github-repos",
+						"octocat",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

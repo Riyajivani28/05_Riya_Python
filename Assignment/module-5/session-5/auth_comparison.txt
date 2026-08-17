@@ -1,0 +1,33 @@
+====================================================================
+TokenAuthentication vs SessionAuthentication in Django REST Framework
+====================================================================
+
+1. What is TokenAuthentication?
+--------------------------------
+TokenAuthentication is a stateless, HTTP-header-based authentication mechanism provided by Django REST Framework (DRF). When a user logs in with valid credentials, the server generates a unique token (a random string saved in the database) and returns it to the client. The client stores this token (e.g., in localStorage or mobile app storage) and sends it in the HTTP "Authorization" header (e.g., `Authorization: Token <key>`) with every subsequent request.
+
+2. What is SessionAuthentication?
+----------------------------------
+SessionAuthentication is a stateful, cookie-based authentication mechanism standard in web applications. When a user logs in, Django creates a session record on the server and sets a session ID in a browser cookie (`sessionid`). The browser automatically includes this cookie in subsequent HTTP requests, and Django validates the session against its database/cache.
+
+3. How They Differ:
+-------------------
+- Statefulness & Storage:
+  - TokenAuthentication: Stateless on the client side; client explicitly sends the token in the HTTP Authorization header.
+  - SessionAuthentication: Stateful; relies on browser cookies managed automatically by the browser along with CSRF protection.
+
+- Client Type Support:
+  - TokenAuthentication: Ideal for mobile apps, SPA frameworks (React, Angular, Vue), and third-party API clients because native apps do not naturally support web cookies.
+  - SessionAuthentication: Ideal for traditional web applications and browser-based interfaces rendered by the server or frontends running on the same domain.
+
+- Cross-Origin / CORS:
+  - TokenAuthentication works easily across different domains (cross-origin) without cookie restriction problems.
+  - SessionAuthentication requires proper CORS credentials configuration (`withCredentials: true`) and CSRF token verification when accessed across domains.
+
+4. Simple Use Cases:
+--------------------
+- TokenAuthentication Use Case:
+  A mobile food delivery application (e.g., Zomato mobile app on Android/iOS) authenticating API calls using an API Token in request headers.
+
+- SessionAuthentication Use Case:
+  A traditional e-commerce web application (e.g., Flipkart website) where users log in via a browser session, with authentication state maintained seamlessly through browser cookies.
