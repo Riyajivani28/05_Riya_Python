@@ -1,0 +1,11 @@
+This directory is reserved for Postman testing screenshots as documented in README.md:
+- 01_category_get.png
+- 02_category_post.png
+- 03_menu_item_post.png
+- 04_menu_item_get.png
+- 05_menu_item_invalid_price.png
+- 06_order_post_token.png
+- 07_order_get_token.png
+- 08_order_pagination.png
+- 09_order_status_filtering.png
+- 10_order_unauthorized.png
